@@ -3,46 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slaap & CPAP Trend</title>
+    <title>Mijn Slaap & CPAP Master</title>
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --bg: #0b0e14; --card: rgba(255,255,255,0.07); --blue: #38bdf8; --green: #4ade80; --red: #fb7185; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; padding: 15px; margin: 0; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; padding: 15px; margin: 0; padding-bottom: 40px; }
+        h1 { font-size: 22px; color: var(--blue); margin-bottom: 20px; }
+        
         .input-section { background: #1e293b; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--blue); }
-        input { background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; width: 100%; margin-bottom: 10px; box-sizing: border-box; }
-        button { background: var(--blue); border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
-        .card { background: var(--card); padding: 15px; border-radius: 14px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); }
-        .chart-box { height: 200px; width: 100%; }
-        h2 { font-size: 16px; color: var(--blue); margin-top: 20px; }
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 3px; }
+        input { background: #0f172a; border: 1px solid #334155; color: white; padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; }
+        
+        button { background: var(--blue); border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; color: #0b0e14; }
+
+        .card { background: var(--card); padding: 15px; border-radius: 14px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .chart-box { height: 180px; margin-top: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+        th { text-align: left; color: #94a3b8; padding-bottom: 8px; }
+        td { padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05); }
         .good { color: var(--green); }
         .bad { color: var(--red); }
     </style>
 </head>
 <body>
 
-    <h1>Slaap Trend 📈</h1>
+    <h1>Slaap & CPAP Dashboard</h1>
 
     <div class="input-section">
-        <label style="font-size: 12px;">AHI van vannacht:</label>
-        <input type="number" id="inAHI" step="0.1" placeholder="Bijv. 1.4">
-        <button onclick="addEntry()">Voeg Nacht Toe</button>
+        <div class="input-grid">
+            <div><label>AHI (CPAP)</label><input type="number" id="inAHI" step="0.1" placeholder="1.4"></div>
+            <div><label>Slaapuren</label><input type="text" id="inSlaap" placeholder="5:14"></div>
+            <div><label>Masker Lek</label><input type="text" id="inLek" placeholder="Goed"></div>
+            <div><label>Gevoel (1-10)</label><input type="number" id="inMood" placeholder="7"></div>
+        </div>
+        <button onclick="addEntry()">Nacht Opslaan</button>
     </div>
 
-    <div class="card">
-        <span>Laatste AHI Score</span>
-        <strong id="currentAHI" style="font-size: 24px;">--</strong>
+    <div class="stats-grid">
+        <div class="card">
+            <span>Laatste AHI</span>
+            <strong id="curAHI">--</strong>
+        </div>
+        <div class="card">
+            <span>Masker</span>
+            <strong id="curLek">--</strong>
+        </div>
     </div>
 
     <div class="card">
         <span>AHI Trend (Laatste 7 nachten)</span>
-        <div class="chart-box">
-            <canvas id="trendChart"></canvas>
-        </div>
+        <div class="chart-box"><canvas id="trendChart"></canvas></div>
+    </div>
+
+    <div class="card">
+        <span>Geschiedenis</span>
+        <table id="historyTable">
+            <thead>
+                <tr>
+                    <th>Slaap</th>
+                    <th>AHI</th>
+                    <th>Lek</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
     </div>
 
     <script>
-        let ahiHistory = JSON.parse(localStorage.getItem('ahiHistory')) || [0, 0, 0, 0, 0, 0, 0];
+        // Data ophalen uit geheugen of leeg beginnen
+        let history = JSON.parse(localStorage.getItem('sleepHistory')) || [];
         let trendChart;
 
         function initChart() {
@@ -50,40 +84,62 @@
             trendChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['-6', '-5', '-4', '-3', '-2', '-1', 'Nu'],
+                    labels: history.map((_, i) => i + 1),
                     datasets: [{
-                        label: 'AHI',
-                        data: ahiHistory,
+                        data: history.map(h => h.ahi),
                         borderColor: '#38bdf8',
-                        backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                        tension: 0.3,
                         fill: true,
-                        tension: 0.3
+                        backgroundColor: 'rgba(56, 189, 248, 0.1)'
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, grid: { color: '#334155' } }, x: { grid: { display: false } } },
+                    scales: { y: { beginAtZero: true }, x: { display: false } },
                     plugins: { legend: { display: false } }
                 }
             });
-            document.getElementById('currentAHI').innerText = ahiHistory[ahiHistory.length - 1] + " /u";
+            updateUI();
         }
 
         function addEntry() {
-            const val = parseFloat(document.getElementById('inAHI').value);
-            if (isNaN(val)) return alert("Vul een getal in");
+            const ahi = document.getElementById('inAHI').value;
+            const slaap = document.getElementById('inSlaap').value;
+            const lek = document.getElementById('inLek').value;
 
-            ahiHistory.shift(); // Verwijder oudste
-            ahiHistory.push(val); // Voeg nieuwe toe
+            if(!ahi || !slaap) return alert("Vul minimaal AHI en Slaapuren in");
+
+            const newEntry = { ahi: parseFloat(ahi), slaap, lek, date: new Date().toLocaleDateString() };
+            history.push(newEntry);
+            if(history.length > 7) history.shift(); // Maximaal 7 nachten
+
+            localStorage.setItem('sleepHistory', JSON.stringify(history));
+            updateUI();
             
-            localStorage.setItem('ahiHistory', JSON.stringify(ahiHistory));
-            
-            trendChart.data.datasets[0].data = ahiHistory;
+            // Grafiek updaten
+            trendChart.data.labels = history.map((_, i) => i + 1);
+            trendChart.data.datasets[0].data = history.map(h => h.ahi);
             trendChart.update();
+        }
+
+        function updateUI() {
+            if(history.length === 0) return;
+            const last = history[history.length - 1];
             
-            document.getElementById('currentAHI').innerText = val + " /u";
-            document.getElementById('currentAHI').className = (val < 5) ? "good" : "bad";
+            document.getElementById('curAHI').innerText = last.ahi + " /u";
+            document.getElementById('curAHI').className = last.ahi < 5 ? 'good' : 'bad';
+            document.getElementById('curLek').innerText = last.lek;
+
+            // Tabel vullen
+            const tbody = document.querySelector('#historyTable tbody');
+            tbody.innerHTML = history.slice().reverse().map(h => `
+                <tr>
+                    <td>${h.slaap}</td>
+                    <td class="${h.ahi < 5 ? 'good' : 'bad'}">${h.ahi}</td>
+                    <td>${h.lek}</td>
+                </tr>
+            `).join('');
         }
 
         initChart();
