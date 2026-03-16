@@ -3,30 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slaap & CPAP Expert</title>
+    <title>Slaap & CPAP Expert v2.2</title>
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --bg: #0b0e14; --card: rgba(255,255,255,0.07); --blue: #38bdf8; --green: #4ade80; --red: #fb7185; --purple: #a855f7; }
+        :root { --bg: #0b0e14; --card: rgba(255,255,255,0.07); --blue: #38bdf8; --green: #4ade80; --red: #fb7185; }
         body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; padding: 15px; margin: 0; padding-bottom: 40px; }
         h1 { font-size: 20px; color: var(--blue); margin-bottom: 15px; }
         
         .input-section { background: rgba(56, 189, 248, 0.05); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(56, 189, 248, 0.3); }
         .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
         label { display: block; font-size: 10px; color: #94a3b8; text-transform: uppercase; margin-bottom: 2px; }
-        input { background: #0f172a; border: 1px solid #334155; color: white; padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 14px; }
+        input, textarea { background: #0f172a; border: 1px solid #334155; color: white; padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 14px; }
+        textarea { height: 60px; resize: none; margin-top: 5px; }
         
-        button { background: var(--blue); border: none; padding: 14px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; color: #0b0e14; font-size: 16px; margin-top: 5px; }
-        .btn-clear { background: transparent; color: var(--red); border: 1px solid var(--red); margin-top: 20px; font-size: 12px; padding: 8px; }
+        button { background: var(--blue); border: none; padding: 14px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; color: #0b0e14; font-size: 16px; margin-top: 10px; }
 
         .card { background: var(--card); padding: 15px; border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        .chart-box { height: 200px; position: relative; margin-top: 10px; }
         
         table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
         th { text-align: left; color: #94a3b8; padding-bottom: 8px; font-weight: normal; }
         td { padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.05); }
-        .small-label { font-size: 10px; color: #64748b; display: block; }
+        .note-text { color: #94a3b8; font-style: italic; display: block; margin-top: 2px; font-size: 11px; }
         .good { color: var(--green); }
         .bad { color: var(--red); }
     </style>
@@ -40,101 +39,61 @@
             <div><label>AHI (myAir)</label><input type="number" id="inAHI" step="0.1" placeholder="1.4"></div>
             <div><label>Totale Slaap</label><input type="text" id="inSlaap" placeholder="5:14"></div>
             <div><label>Diepe Slaap</label><input type="text" id="inDiep" placeholder="0:45"></div>
-            <div><label>REM Slaap</label><input type="text" id="inREM" placeholder="1:10"></div>
-            <div><label>Lichte Slaap</label><input type="text" id="inLicht" placeholder="3:20"></div>
             <div><label>Masker Lek</label><input type="text" id="inLek" placeholder="Goed"></div>
         </div>
+        <label>Dagelijkse Notitie</label>
+        <textarea id="inNote" placeholder="Hoe voel je je echt? Bijv: Licht geslapen door lawaai..."></textarea>
         <button onclick="addEntry()">Nacht Opslaan</button>
     </div>
 
     <div class="stats-grid">
         <div class="card">
             <span>Laatste AHI</span>
-            <strong id="curAHI" style="font-size: 22px;">--</strong>
+            <strong id="curAHI" style="font-size: 22px; display: block;">--</strong>
         </div>
         <div class="card">
             <span>Masker Status</span>
-            <strong id="curLek" style="font-size: 22px;">--</strong>
+            <strong id="curLek" style="font-size: 22px; display: block;">--</strong>
         </div>
     </div>
 
     <div class="card">
-        <span>AHI Trend (Laatste nachten)</span>
-        <div class="chart-box"><canvas id="trendChart"></canvas></div>
-    </div>
-
-    <div class="card">
-        <span>Geschiedenis & Details</span>
+        <span>Logboek & Notities</span>
         <table id="historyTable">
             <thead>
                 <tr>
-                    <th>Data</th>
+                    <th>Slaap & Notitie</th>
                     <th>AHI</th>
-                    <th>Fases (D/R/L)</th>
+                    <th>Lek</th>
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
-        <button class="btn-clear" onclick="clearData()">Wis alle data</button>
     </div>
 
     <script>
         let history = JSON.parse(localStorage.getItem('sleepHistory')) || [];
-        let trendChart;
 
         window.onload = function() {
-            initChart();
             updateUI();
         };
-
-        function initChart() {
-            const ctx = document.getElementById('trendChart').getContext('2d');
-            trendChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: history.length > 0 ? history.map((_, i) => i + 1) : [1,2,3,4,5],
-                    datasets: [{
-                        data: history.map(h => h.ahi),
-                        borderColor: '#38bdf8',
-                        backgroundColor: 'rgba(56, 189, 248, 0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 5,
-                        pointBackgroundColor: '#38bdf8'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { 
-                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-                        x: { display: false } 
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
 
         function addEntry() {
             const entry = {
                 ahi: parseFloat(document.getElementById('inAHI').value) || 0,
                 slaap: document.getElementById('inSlaap').value || '-',
                 diep: document.getElementById('inDiep').value || '-',
-                rem: document.getElementById('inREM').value || '-',
-                licht: document.getElementById('inLicht').value || '-',
                 lek: document.getElementById('inLek').value || '-',
+                note: document.getElementById('inNote').value || '',
                 date: new Date().toLocaleDateString('nl-NL', {day:'2-digit', month:'2-digit'})
             };
 
             history.push(entry);
-            if(history.length > 14) history.shift(); // We bewaren 2 weken
-
+            if(history.length > 14) history.shift();
             localStorage.setItem('sleepHistory', JSON.stringify(history));
             
-            trendChart.data.labels = history.map((_, i) => i + 1);
-            trendChart.data.datasets[0].data = history.map(h => h.ahi);
-            trendChart.update();
-            
+            // Maak notitieveld leeg na opslaan
+            document.getElementById('inNote').value = '';
             updateUI();
         }
 
@@ -145,23 +104,19 @@
             document.getElementById('curAHI').innerText = last.ahi + " /u";
             document.getElementById('curAHI').className = last.ahi < 5 ? 'good' : 'bad';
             document.getElementById('curLek').innerText = last.lek;
-            document.getElementById('curLek').className = (last.lek.toLowerCase() === 'goed') ? 'good' : 'e2e8f0';
 
             const tbody = document.querySelector('#historyTable tbody');
             tbody.innerHTML = history.slice().reverse().map(h => `
                 <tr>
-                    <td><strong>${h.slaap}</strong><span class="small-label">${h.date}</span></td>
+                    <td>
+                        <strong>${h.slaap}</strong> (${h.date})
+                        ${h.note ? `<span class="note-text">"${h.note}"</span>` : ''}
+                        <small style="color:#64748b">Diep: ${h.diep}</small>
+                    </td>
                     <td class="${h.ahi < 5 ? 'good' : 'bad'}"><strong>${h.ahi}</strong></td>
-                    <td><span class="small-label">D:${h.diep} R:${h.rem} L:${h.licht}</span></td>
+                    <td>${h.lek}</td>
                 </tr>
             `).join('');
-        }
-
-        function clearData() {
-            if(confirm("Weet je zeker dat je alle geschiedenis wilt wissen?")) {
-                localStorage.removeItem('sleepHistory');
-                location.reload();
-            }
         }
     </script>
 </body>
