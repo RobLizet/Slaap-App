@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijn Slaap & CPAP v2.1</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #0b0e14;
+            --card-bg: rgba(255, 255, 255, 0.07);
+            --text-main: #e2e8f0;
+            --accent-blue: #38bdf8;
+            --accent-green: #4ade80;
+            --accent-warning: #fb7185;
+        }
+
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: -apple-system, sans-serif; padding: 15px; margin: 0; padding-bottom: 50px; }
+        h1 { font-size: 20px; color: var(--accent-blue); display: flex; justify-content: space-between; margin-bottom: 20px; }
+        
+        .input-section { background: #1e293b; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--accent-blue); }
+        .input-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .input-item { flex: 1; min-width: 80px; }
+        
+        label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 3px; }
+        input, textarea { background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; width: 100%; box-sizing: border-box; }
+        textarea { height: 60px; resize: none; margin-top: 5px; }
+        
+        button { background: var(--accent-blue); border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card { background: var(--card-bg); padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); }
+        .full-width { grid-column: span 2; }
+        
+        .card span { font-size: 11px; color: #94a3b8; display: block; margin-bottom: 3px; }
+        .card strong { font-size: 16px; }
+        .note-text { font-size: 13px; color: #cbd5e1; font-style: italic; margin-top: 5px; }
+        
+        .good { color: var(--accent-green); }
+        .bad { color: var(--accent-warning); }
+        .chart-box { height: 180px; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>Slaap & CPAP <span>v2.1</span></h1>
+
+    <div class="input-section">
+        <div class="input-row">
+            <div class="input-item"><label>AHI</label><input type="number" id="inAHI" step="0.1" value="1.4"></div>
+            <div class="input-item"><label>Slaap</label><input type="text" id="inSlaap" value="5:14"></div>
+            <div class="input-item"><label>Lek</label><input type="text" id="inLek" value="Goed"></div>
+        </div>
+        <label>Dagelijkse Notitie (bijv. "Licht geslapen door lawaai")</label>
+        <textarea id="inNote" placeholder="Hoe voel je je echt?"></textarea>
+        <button onclick="saveData()">Sla Gegevens Op</button>
+    </div>
+
+    <div class="grid">
+        <div class="card full-width">
+            <span>Logboek Notitie</span>
+            <p id="st-note" class="note-text">Nog geen notitie ingevoerd.</p>
+        </div>
+
+        <div class="card">
+            <span>AHI (CPAP)</span>
+            <strong id="st-ahi" class="good">1.4 /u</strong>
+        </div>
+
+        <div class="card">
+            <span>Masker Lek</span>
+            <strong id="st-lek" class="good">Goed</strong>
+        </div>
+
+        <div class="card full-width">
+            <span>Grafiek Trend</span>
+            <div class="chart-box"><canvas id="myChart"></canvas></div>
+        </div>
+    </div>
+
+    <script>
+        function saveData() {
+            const ahi = document.getElementById('inAHI').value;
+            const slaap = document.getElementById('inSlaap').value;
+            const lek = document.getElementById('inLek').value;
+            const note = document.getElementById('inNote').value;
+
+            // Update het scherm direct
+            document.getElementById('st-ahi').innerText = ahi + " /u";
+            document.getElementById('st-lek').innerText = lek;
+            document.getElementById('st-note').innerText = note || "Geen notitie.";
+            document.getElementById('st-ahi').className = (ahi < 5) ? "good" : "bad";
+
+            // Opslaan in de browser
+            localStorage.setItem('ahi', ahi);
+            localStorage.setItem('note', note);
+            
+            alert("✅ Gegevens opgeslagen voor morgen!");
+        }
+
+        // De Grafiek (Simulatie van lichte slaap)
+        const ctx = document.getElementById('myChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['23', '01', '03', '05', '07'],
+                datasets: [{
+                    data: [1, 3, 2, 3, 1, 4, 2],
+                    borderColor: '#38bdf8',
+                    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { 
+                    y: { ticks: { display: false }, grid: { display: false }, beginAtZero: true, max: 5 },
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    </script>
+</body>
+</html>
