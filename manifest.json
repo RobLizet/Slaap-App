@@ -1,0 +1,15 @@
+{
+  "short_name": "SlaapApp",
+  "name": "Mijn Slaap & CPAP Tracker",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/547/547433.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#0b0e14",
+  "display": "standalone",
+  "theme_color": "#38bdf8"
+}
