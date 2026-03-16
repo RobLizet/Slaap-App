@@ -3,30 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slaap & CPAP Totaal</title>
-    <link rel="manifest" href="manifest.json">
+    <title>Slaap CPAP Pro v2.6</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --bg: #0b0e14; --card: rgba(255,255,255,0.07); --blue: #38bdf8; --green: #4ade80; --red: #fb7185; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; padding: 10px; margin: 0; padding-bottom: 40px; }
-        h1 { font-size: 18px; color: var(--blue); margin-bottom: 10px; text-align: center; }
-        
+        :root { --bg: #0b0e14; --card: rgba(255,255,255,0.07); --blue: #38bdf8; --purple: #a855f7; --green: #4ade80; --red: #fb7185; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; padding: 10px; margin: 0; padding-bottom: 50px; }
+        h1 { font-size: 18px; color: var(--blue); text-align: center; margin: 10px 0; }
         .input-section { background: rgba(56, 189, 248, 0.05); padding: 12px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(56, 189, 248, 0.3); }
-        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         label { display: block; font-size: 9px; color: #94a3b8; text-transform: uppercase; margin-bottom: 2px; }
         input, textarea { background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; width: 100%; box-sizing: border-box; font-size: 13px; }
-        textarea { height: 50px; resize: none; margin-top: 5px; }
-        
-        button { background: var(--blue); border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; color: #0b0e14; font-size: 15px; margin-top: 8px; }
-
+        button { background: var(--blue); border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; color: #0b0e14; margin-top: 8px; }
         .card { background: var(--card); padding: 12px; border-radius: 14px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-        .chart-box { height: 160px; position: relative; }
-        
+        .chart-box { height: 200px; }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .btn-alt { background: transparent; color: #94a3b8; border: 1px solid #334155; font-size: 12px; padding: 8px; }
+        .btn-danger { color: var(--red); border-color: var(--red); }
         table { width: 100%; border-collapse: collapse; font-size: 11px; }
         td { padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05); }
-        .small-info { color: #64748b; font-size: 10px; display: block; line-height: 1.2; }
-        .good { color: var(--green); }
     </style>
 </head>
 <body>
@@ -36,102 +30,105 @@
     <div class="input-section">
         <div class="input-grid">
             <div><label>AHI (myAir)</label><input type="number" id="inAHI" step="0.1" placeholder="1.4"></div>
-            <div><label>Masker Lek</label><input type="text" id="inLek" placeholder="Goed"></div>
+            <div><label>REM (bijv 1:10)</label><input type="text" id="inREM" placeholder="1:10"></div>
             <div><label>Met Masker</label><input type="text" id="inSlaap" placeholder="5:21"></div>
             <div><label>Zonder Masker</label><input type="text" id="inZonder" placeholder="1:00"></div>
-            <div><label>Diepe Slaap</label><input type="text" id="inDiep" placeholder="0:45"></div>
-            <div><label>REM Slaap</label><input type="text" id="inREM" placeholder="1:10"></div>
         </div>
-        <textarea id="inNote" placeholder="Notitie (bijv. gevoel, lawaai...)"></textarea>
+        <textarea id="inNote" style="margin-top:8px" placeholder="Hoe voel je je?"></textarea>
         <button onclick="addEntry()">Nacht Opslaan</button>
     </div>
 
-    <div class="stats-grid">
-        <div class="card"><span>AHI</span><strong id="curAHI" style="font-size:20px; display:block;">--</strong></div>
-        <div class="card"><span>Zonder Masker</span><strong id="curZonder" style="font-size:20px; display:block;">--</strong></div>
-    </div>
-
     <div class="card">
-        <span>AHI Trend</span>
+        <span style="font-size: 12px; color: var(--blue)">● AHI</span> | <span style="font-size: 12px; color: var(--purple)">● REM (minuten)</span>
         <div class="chart-box"><canvas id="trendChart"></canvas></div>
     </div>
 
     <div class="card">
-        <span>Logboek</span>
+        <span>Geschiedenis</span>
         <table id="historyTable">
-            <thead><tr><th align="left">Datum/Slaap</th><th align="left">AHI</th><th align="left">Fases</th></tr></thead>
             <tbody></tbody>
         </table>
+        <div class="btn-group">
+            <button class="btn-alt" onclick="exportData()">Backup (Download)</button>
+            <button class="btn-alt btn-danger" onclick="clearData()">Alles Wissen</button>
+        </div>
     </div>
 
     <script>
         let history = JSON.parse(localStorage.getItem('sleepHistory')) || [];
         let trendChart;
 
-        window.onload = function() {
-            initChart();
-            updateUI();
-        };
+        function timeToMin(t) {
+            if(!t || !t.includes(':')) return 0;
+            const [h, m] = t.split(':').map(Number);
+            return (h * 60) + m;
+        }
+
+        window.onload = function() { initChart(); updateUI(); };
 
         function initChart() {
             const ctx = document.getElementById('trendChart').getContext('2d');
             trendChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: history.length > 0 ? history.map((_, i) => i + 1) : [1,2,3,4,5],
-                    datasets: [{
-                        data: history.map(h => h.ahi),
-                        borderColor: '#38bdf8',
-                        backgroundColor: 'rgba(56, 189, 248, 0.1)',
-                        fill: true, tension: 0.4
-                    }]
+                    labels: history.map(h => h.date),
+                    datasets: [
+                        { label: 'AHI', data: history.map(h => h.ahi), borderColor: '#38bdf8', tension: 0.4, yAxisID: 'y' },
+                        { label: 'REM', data: history.map(h => timeToMin(h.rem)), borderColor: '#a855f7', tension: 0.4, yAxisID: 'y1' }
+                    ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { type: 'linear', display: true, position: 'left', title: {display:true, text:'AHI', color:'#38bdf8'} },
+                        y1: { type: 'linear', display: true, position: 'right', grid: {drawOnChartArea: false}, title: {display:true, text:'REM (min)', color:'#a855f7'} }
+                    },
+                    plugins: { legend: { display: false } }
+                }
             });
         }
 
         function addEntry() {
             const entry = {
                 ahi: parseFloat(document.getElementById('inAHI').value) || 0,
+                rem: document.getElementById('inREM').value || '0:00',
                 slaap: document.getElementById('inSlaap').value || '-',
                 zonder: document.getElementById('inZonder').value || '0:00',
-                diep: document.getElementById('inDiep').value || '-',
-                rem: document.getElementById('inREM').value || '-',
-                lek: document.getElementById('inLek').value || '-',
                 note: document.getElementById('inNote').value || '',
                 date: new Date().toLocaleDateString('nl-NL', {day:'2-digit', month:'2-digit'})
             };
             history.push(entry);
-            if(history.length > 14) history.shift();
+            if(history.length > 30) history.shift();
             localStorage.setItem('sleepHistory', JSON.stringify(history));
-            
-            trendChart.data.labels = history.map((_, i) => i + 1);
-            trendChart.data.datasets[0].data = history.map(h => h.ahi);
-            trendChart.update();
-            
-            // Velden leegmaken
-            ['inNote', 'inZonder', 'inDiep', 'inREM'].forEach(id => document.getElementById(id).value = '');
-            updateUI();
+            location.reload();
         }
 
         function updateUI() {
-            if(history.length === 0) return;
-            const last = history[history.length - 1];
-            document.getElementById('curAHI').innerText = last.ahi + " /u";
-            document.getElementById('curAHI').className = last.ahi < 5 ? 'good' : 'bad';
-            document.getElementById('curZonder').innerText = last.zonder;
-
             const tbody = document.querySelector('#historyTable tbody');
             tbody.innerHTML = history.slice().reverse().map(h => `
                 <tr>
-                    <td>
-                        <strong>${h.date}</strong><br>${h.slaap} (+${h.zonder})
-                        ${h.note ? `<br><i class="small-info">"${h.note}"</i>` : ''}
-                    </td>
-                    <td class="${h.ahi < 5 ? 'good' : 'bad'}"><strong>${h.ahi}</strong></td>
-                    <td><span class="small-info">D: ${h.diep}</span><span class="small-info">R: ${h.rem}</span></td>
+                    <td><strong>${h.date}</strong><br><small>${h.slaap} (+${h.zonder})</small></td>
+                    <td>AHI: <b style="color:${h.ahi<5?'#4ade80':'#fb7185'}">${h.ahi}</b><br><small>REM: ${h.rem}</small></td>
+                    <td style="font-size:10px; color:#94a3b8"><i>${h.note}</i></td>
                 </tr>
             `).join('');
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "slaap_backup_" + new Date().toLocaleDateString() + ".json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        function clearData() {
+            if(confirm("Hele geschiedenis wissen?")) {
+                localStorage.removeItem('sleepHistory');
+                location.reload();
+            }
         }
     </script>
 </body>
