@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Slaap & CPAP Pro v3.4</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E?v=7">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E?v=7">
+    <title>Slaap & CPAP Pro v3.5</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E?v=8">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E?v=8">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -126,8 +126,29 @@
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     scales: {
-                        y: { position: 'left', beginAtZero: true, grid: { color: '#f3f4f6' } },
-                        y1: { position: 'right', beginAtZero: true, max: y1Limit, grid: { display: false } }
+                        y: { 
+                            position: 'left', 
+                            beginAtZero: true, 
+                            title: { display: true, text: 'AHI', color: '#38bdf8' }, // Blauwe Titel
+                            grid: { color: '#f3f4f6' },
+                            ticks: { color: '#38bdf8' } // Blauwe Getallen
+                        },
+                        y1: { 
+                            position: 'right', 
+                            beginAtZero: true, 
+                            max: y1Limit, 
+                            title: { display: true, text: 'Minuten', color: '#94a3b8' }, 
+                            grid: { display: false },
+                            ticks: { 
+                                color: (ctx) => {
+                                    // De rechter-as getallen afwisselend kleuren
+                                    // Omdat REM en Diep vaak dicht bij elkaar liggen, 
+                                    // kleuren we de ticks op basis van hun positie
+                                    if(ctx.tick.value >= 60) return '#a855f7'; // Paars voor REM-regio (vaak hoger)
+                                    return '#10b981'; // Groen voor Diep-regio
+                                }
+                            }
+                        }
                     },
                     plugins: { legend: { display: false } }
                 }
