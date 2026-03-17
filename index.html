@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Slaap & CPAP Pro v3.2</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E?v=5">
+    <title>Slaap & CPAP Pro v3.3</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E?v=6">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --bg: #0b0e14; --card: rgba(255,255,255,0.06); --blue: #38bdf8; --purple: #a855f7; --green: #4ade80; --red: #fb7185; --nav: #161b22; }
@@ -26,7 +26,7 @@
         table { width: 100%; border-collapse: collapse; }
         td { padding: 10px 0; border-top: 1px solid #30363d; }
         .badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        .del-btn { color: var(--red); background: none; border: none; font-size: 18px; padding: 0 10px; cursor: pointer; }
+        .del-btn { color: var(--red); background: none; border: none; font-size: 20px; padding: 0 10px; cursor: pointer; line-height: 1; }
         .btn-small { background: #21262d; color: #c9d1d9; border: none; padding: 8px; border-radius: 6px; font-size: 11px; flex: 1; cursor: pointer; }
     </style>
 </head>
@@ -61,11 +61,11 @@
             <span style="font-weight:bold; font-size:14px; display:block; margin-bottom:10px;">Logboek</span>
             <table id="historyTable"><tbody></tbody></table>
             
-            <div style="display:flex; gap:5px; margin-top:20px; flex-wrap: wrap;">
+            <div style="display:flex; gap:5px; margin-top:20px;">
                 <button class="btn-small" onclick="exportData()">Backup</button>
                 <button class="btn-small" onclick="document.getElementById('importFile').click()">Herstellen</button>
                 <button class="btn-small" style="color:var(--red);" onclick="clearData()">Leegmaken</button>
-                <input type="file" id="importFile" style="display:none" onchange="importData(event)">
+                <input type="file" id="importFile" style="display:none" onchange="importData(event)" accept=".json">
             </div>
         </div>
         <div style="text-align: center; font-size: 11px; color: #484f58; margin-top: 20px;">Made by Rob Borghouts 2026</div>
@@ -102,21 +102,26 @@
 
         function initChart() {
             const ctx = document.getElementById('sleepChart').getContext('2d');
+            
+            // Zoek de hoogste waarde voor de minuten-as om afsnijden te voorkomen
+            const maxMins = history.length > 0 ? Math.max(...history.map(h => Math.max(tToM(h.rem), tToM(h.diep)))) : 60;
+            const y1Limit = Math.max(60, Math.ceil((maxMins + 10) / 10) * 10);
+
             sleepChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: history.map(h => h.date),
                     datasets: [
-                        { label: 'AHI', data: history.map(h => h.ahi), borderColor: '#38bdf8', yAxisID: 'y', tension: 0.3, pointRadius: 4, pointBackgroundColor: '#38bdf8' },
-                        { label: 'REM', data: history.map(h => tToM(h.rem)), borderColor: '#a855f7', yAxisID: 'y1', tension: 0.3, pointRadius: 4, pointBackgroundColor: '#a855f7' },
-                        { label: 'Diep', data: history.map(h => tToM(h.diep)), borderColor: '#4ade80', yAxisID: 'y1', tension: 0.3, pointRadius: 4, pointBackgroundColor: '#4ade80' }
+                        { label: 'AHI', data: history.map(h => h.ahi), borderColor: '#38bdf8', yAxisID: 'y', tension: 0.3, pointRadius: 5, pointBackgroundColor: '#38bdf8' },
+                        { label: 'REM', data: history.map(h => tToM(h.rem)), borderColor: '#a855f7', yAxisID: 'y1', tension: 0.3, pointRadius: 5, pointBackgroundColor: '#a855f7' },
+                        { label: 'Diep', data: history.map(h => tToM(h.diep)), borderColor: '#4ade80', yAxisID: 'y1', tension: 0.3, pointRadius: 5, pointBackgroundColor: '#4ade80' }
                     ]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     scales: {
                         y: { position: 'left', beginAtZero: true, title: { display: true, text: 'AHI', color: '#38bdf8' }, grid: { color: '#30363d' } },
-                        y1: { position: 'right', beginAtZero: true, title: { display: true, text: 'Minuten', color: '#94a3b8' }, grid: { display: false } }
+                        y1: { position: 'right', beginAtZero: true, max: y1Limit, title: { display: true, text: 'Minuten', color: '#94a3b8' }, grid: { display: false } }
                     },
                     plugins: { legend: { display: false } }
                 }
