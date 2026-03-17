@@ -2,51 +2,59 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slaap CPAP Pro v2.9</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23a)'/%3E%3Ctext x='50%25' y='65%25' font-family='sans-serif' font-weight='bold' font-size='50' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Slaap & CPAP Pro v3.0</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E?v=3">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E?v=3">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --bg: #0b0e14; --card: rgba(255,255,255,0.07); --blue: #38bdf8; --purple: #a855f7; --green: #4ade80; --red: #fb7185; --nav-bg: #1e293b; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; padding: 10px; margin: 0; padding-bottom: 75px; }
-        h1 { font-size: 18px; color: var(--blue); text-align: center; margin: 10px 0; }
-        .input-section { background: rgba(56, 189, 248, 0.05); padding: 12px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(56, 189, 248, 0.3); }
-        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        label { display: block; font-size: 9px; color: #94a3b8; text-transform: uppercase; margin-bottom: 2px; }
-        input, textarea { background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; width: 100%; box-sizing: border-box; font-size: 13px; }
-        button { background: var(--blue); border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; color: #0b0e14; margin-top: 8px; }
-        .card { background: var(--card); padding: 12px; border-radius: 14px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); }
-        .chart-box { height: 220px; }
+        :root { --bg: #0b0e14; --card: rgba(255,255,255,0.06); --blue: #38bdf8; --purple: #a855f7; --green: #4ade80; --red: #fb7185; --nav: #161b22; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-bottom: 90px; }
+        h1 { font-size: 20px; color: var(--blue); text-align: center; margin-bottom: 15px; letter-spacing: -0.5px; }
+        
+        .input-card { background: rgba(56, 189, 248, 0.04); padding: 15px; border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.2); margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        label { font-size: 10px; color: #94a3b8; text-transform: uppercase; display: block; margin-bottom: 4px; font-weight: 600; }
+        input, textarea { background: #010409; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 14px; transition: border 0.2s; }
+        input:focus { border-color: var(--blue); outline: none; }
+        
+        .btn-main { background: var(--blue); color: #0b0e14; border: none; padding: 14px; border-radius: 12px; font-weight: 800; width: 100%; margin-top: 12px; font-size: 15px; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2); }
+        .card { background: var(--card); padding: 15px; border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        
         .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav-bg); display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid rgba(255,255,255,0.1); z-index: 100; }
-        .nav-item { color: #94a3b8; text-align: center; padding: 15px; font-size: 14px; font-weight: bold; cursor: pointer; }
-        .nav-item.active { color: var(--blue); border-top: 2px solid var(--blue); background: rgba(255,255,255,0.02); }
-        .ai-report { padding: 5px; line-height: 1.6; color: #cbd5e1; font-size: 13px; }
-        .ai-report strong { color: var(--blue); }
-        .highlight { color: var(--green); font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        td { padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05); }
-        .signature { text-align: center; font-family: cursive; font-size: 11px; color: #64748b; margin: 20px 0; opacity: 0.7; }
-        .legend { display: flex; justify-content: space-around; font-size: 10px; margin-bottom: 5px; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav); display: grid; grid-template-columns: 1fr 1fr; padding: 10px 0; border-top: 1px solid #30363d; z-index: 1000; }
+        .nav-btn { color: #8b949e; text-align: center; font-size: 12px; font-weight: 600; cursor: pointer; border: none; background: none; transition: 0.2s; }
+        .nav-btn.active { color: var(--blue); }
+        .nav-btn svg { display: block; margin: 0 auto 4px; width: 20px; height: 20px; fill: currentColor; }
+
+        .legend { display: flex; justify-content: center; gap: 15px; font-size: 10px; margin-bottom: 10px; font-weight: bold; }
+        .signature { text-align: center; font-family: 'Snell Roundhand', cursive; font-size: 12px; color: #484f58; margin-top: 30px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        td { padding: 10px 0; border-top: 1px solid #30363d; }
+        .badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <h1>Slaap & CPAP Totaal</h1>
 
-    <div id="tabInvoer" class="tab-content active">
-        <div class="input-section">
-            <div class="input-grid">
-                <div><label>AHI (myAir)</label><input type="number" id="inAHI" step="0.1" placeholder="1.4"></div>
+    <div id="dashboard" class="tab-content active">
+        <div class="input-card">
+            <div class="grid">
+                <div><label>AHI (myAir)</label><input type="number" id="inAHI" step="0.1" placeholder="bijv. 1.4"></div>
                 <div><label>Met Masker</label><input type="text" id="inSlaap" placeholder="5:21"></div>
                 <div><label>Diepe Slaap</label><input type="text" id="inDiep" placeholder="0:45"></div>
                 <div><label>REM Slaap</label><input type="text" id="inREM" placeholder="1:10"></div>
                 <div><label>Zonder Masker</label><input type="text" id="inZonder" placeholder="1:00"></div>
                 <div><label>Lek</label><input type="text" id="inLek" placeholder="Goed"></div>
             </div>
-            <textarea id="inNote" style="margin-top:8px" placeholder="Notitie (gevoel, lawaai...)"></textarea>
-            <button onclick="addEntry()">Nacht Opslaan</button>
+            <textarea id="inNote" style="margin-top:10px" placeholder="Notitie over de nacht..."></textarea>
+            <button class="btn-main" onclick="addEntry()">Nacht Opslaan</button>
         </div>
 
         <div class="card">
@@ -55,61 +63,71 @@
                 <span style="color:var(--purple)">● REM</span>
                 <span style="color:var(--green)">● DIEP</span>
             </div>
-            <div class="chart-box"><canvas id="trendChart"></canvas></div>
+            <div style="height: 230px;"><canvas id="sleepChart"></canvas></div>
         </div>
 
         <div class="card">
-            <span>Logboek</span>
+            <span style="font-weight:bold; font-size:14px;">Logboek</span>
             <table id="historyTable"><tbody></tbody></table>
-            <div style="display:flex; gap:10px; margin-top:10px;">
-                <button style="background:#334155; color:white; font-size:11px;" onclick="exportData()">Backup</button>
-                <button style="background:#450a0a; color:var(--red); font-size:11px;" onclick="clearData()">Wissen</button>
+            <div style="display:flex; gap:8px; margin-top:15px;">
+                <button onclick="exportData()" style="flex:1; background:#21262d; color:#c9d1d9; border:none; padding:8px; border-radius:6px; font-size:12px;">Backup</button>
+                <button onclick="clearData()" style="flex:1; background:rgba(251,113,133,0.1); color:var(--red); border:none; padding:8px; border-radius:6px; font-size:12px;">Alles Wissen</button>
             </div>
         </div>
+        
         <div class="signature">Made by Rob Borghouts 2026</div>
     </div>
 
-    <div id="tabAnalyse" class="tab-content">
-        <div class="card">
-            <div style="text-align: center; font-size: 30px; margin-bottom: 10px;">🤖 AI Coach</div>
-            <div id="aiAnalysis" class="ai-report">Wacht op data...</div>
+    <div id="analyse" class="tab-content">
+        <div class="card" style="text-align:center; padding:30px 20px;">
+            <div style="font-size:40px; margin-bottom:15px;">🧠</div>
+            <h2 style="margin:0; color:var(--blue);">AI Slaap Coach</h2>
+            <div id="aiResponse" style="text-align:left; margin-top:20px; line-height:1.6; font-size:14px;">
+                Voer minimaal 2 nachten in voor een diepgaande analyse.
+            </div>
         </div>
     </div>
 
     <div class="navbar">
-        <div class="nav-item active" onclick="switchTab('tabInvoer', this)">Dashboard</div>
-        <div class="nav-item" onclick="switchTab('tabAnalyse', this)">AI Analyse</div>
+        <button class="nav-btn active" onclick="showTab('dashboard', this)">
+            <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+            Dashboard
+        </button>
+        <button class="nav-btn" onclick="showTab('analyse', this)">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            AI Analyse
+        </button>
     </div>
 
     <script>
         let history = JSON.parse(localStorage.getItem('sleepHistory')) || [];
-        let trendChart;
+        let sleepChart;
 
-        function timeToMin(t) {
+        function tToM(t) {
             if(!t || !t.includes(':')) return 0;
             const [h, m] = t.split(':').map(Number);
             return (h * 60) + m;
         }
 
-        window.onload = function() { initChart(); updateUI(); generateAIAnalysis(); };
+        window.onload = function() { initChart(); updateUI(); doAI(); };
 
         function initChart() {
-            const ctx = document.getElementById('trendChart').getContext('2d');
-            trendChart = new Chart(ctx, {
+            const ctx = document.getElementById('sleepChart').getContext('2d');
+            sleepChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: history.map(h => h.date),
                     datasets: [
-                        { label: 'AHI', data: history.map(h => h.ahi), borderColor: '#38bdf8', tension: 0.4, yAxisID: 'y' },
-                        { label: 'REM', data: history.map(h => timeToMin(h.rem)), borderColor: '#a855f7', tension: 0.4, yAxisID: 'y1' },
-                        { label: 'Diep', data: history.map(h => timeToMin(h.diep)), borderColor: '#4ade80', tension: 0.4, yAxisID: 'y1' }
+                        { label: 'AHI', data: history.map(h => h.ahi), borderColor: '#38bdf8', yAxisID: 'y', tension: 0.3, pointRadius: 4 },
+                        { label: 'REM', data: history.map(h => tToM(h.rem)), borderColor: '#a855f7', yAxisID: 'y1', tension: 0.3, pointRadius: 0 },
+                        { label: 'Diep', data: history.map(h => tToM(h.diep)), borderColor: '#4ade80', yAxisID: 'y1', tension: 0.3, pointRadius: 0 }
                     ]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     scales: {
-                        y: { type: 'linear', display: true, position: 'left', title: {display:true, text:'AHI'} },
-                        y1: { type: 'linear', display: true, position: 'right', title: {display:true, text:'Minuten'}, grid: {drawOnChartArea:false} }
+                        y: { position: 'left', grid: { color: '#30363d' }, title: { display: true, text: 'AHI', color: '#38bdf8' } },
+                        y1: { position: 'right', grid: { display: false }, title: { display: true, text: 'Minuten', color: '#94a3b8' } }
                     },
                     plugins: { legend: { display: false } }
                 }
@@ -117,7 +135,7 @@
         }
 
         function addEntry() {
-            const entry = {
+            const d = {
                 ahi: parseFloat(document.getElementById('inAHI').value) || 0,
                 rem: document.getElementById('inREM').value || '0:00',
                 diep: document.getElementById('inDiep').value || '0:00',
@@ -127,7 +145,7 @@
                 note: document.getElementById('inNote').value || '',
                 date: new Date().toLocaleDateString('nl-NL', {day:'2-digit', month:'2-digit'})
             };
-            history.push(entry);
+            history.push(d);
             if(history.length > 30) history.shift();
             localStorage.setItem('sleepHistory', JSON.stringify(history));
             location.reload();
@@ -137,54 +155,51 @@
             const tbody = document.querySelector('#historyTable tbody');
             tbody.innerHTML = history.slice().reverse().map(h => `
                 <tr>
-                    <td><strong>${h.date}</strong><br><small>${h.slaap} (+${h.zonder})</small></td>
-                    <td>AHI: <b>${h.ahi}</b><br><small>R:${h.rem} D:${h.diep}</small></td>
-                    <td style="font-size:10px; color:#94a3b8"><i>${h.note}</i></td>
+                    <td><strong>${h.date}</strong><br><small style="color:#8b949e">${h.slaap} (+${h.zonder})</small></td>
+                    <td align="right"><span class="badge" style="background:${h.ahi<5?'rgba(74,222,128,0.1)':'rgba(251,113,133,0.1)'}; color:${h.ahi<5?'#4ade80':'#fb7185'}">AHI ${h.ahi}</span><br>
+                    <small style="color:#8b949e">R:${h.rem} D:${h.diep}</small></td>
                 </tr>
+                ${h.note ? `<tr><td colspan="2" style="border-top:none; padding-top:0; font-size:10px; color:#8b949e; font-style:italic;">"${h.note}"</td></tr>` : ''}
             `).join('');
         }
 
-        function generateAIAnalysis() {
-            const container = document.getElementById('aiAnalysis');
-            if(history.length < 2) return container.innerHTML = "Voer meer nachten in voor een AI analyse.";
+        function doAI() {
+            if(history.length < 2) return;
+            const last = history[history.length-1];
+            const avgAHI = history.reduce((s,n)=>s+n.ahi,0)/history.length;
+            const totalQual = tToM(last.rem) + tToM(last.diep);
+            
+            let msg = `Vannacht was je AHI <b>${last.ahi}</b>. `;
+            if(last.ahi < avgAHI) msg += `Dat is beter dan je gemiddelde van ${avgAHI.toFixed(1)}! 📈<br><br>`;
+            else msg += `Iets hoger dan gemiddeld, maar geen zorgen. <br><br>`;
 
-            const avgAHI = history.reduce((s, n) => s + n.ahi, 0) / history.length;
-            const avgDiep = history.reduce((s, n) => s + timeToMin(n.diep), 0) / history.length;
-            const lastNight = history[history.length - 1];
+            msg += `<b>Kwaliteit check:</b> Je had ${totalQual} min aan diepe en REM slaap. `;
+            if(totalQual < 100) msg += `Dit is relatief laag voor een volledige nacht herstel. Probeer vanavond iets eerder rust te vinden. 🧘‍♂️`;
+            else msg += `Dat is een sterke score voor herstel! Je brein en lichaam hebben goed kunnen opladen. ⚡`;
 
-            let advice = `Gemiddeld is je AHI <strong>${avgAHI.toFixed(1)}</strong>. `;
-            advice += `Je diepe slaap is gemiddeld <strong>${Math.round(avgDiep)} min</strong>.<br><br>`;
+            if(tToM(last.zonder) > 45) msg += `<br><br>⚠️ <b>Let op:</b> Je sliep ${last.zonder} zonder masker. Dit kan de reden zijn voor een licht verhoogde AHI score.`;
 
-            if(timeToMin(lastNight.diep) < 45) {
-                advice += "⚠️ <span class='highlight'>Lichte Slaap Alert:</span> Je diepe slaap was vannacht aan de lage kant. Probeer eens te letten op cafeïne of schermtijd voor het slapen.<br>";
-            } else {
-                advice += "✅ <span class='highlight'>Goed Herstel:</span> Je diepe slaap ziet er stabiel uit.<br>";
-            }
-
-            if(timeToMin(lastNight.zonder) > 60) {
-                advice += "<br>💡 <strong>Tip:</strong> Je slaapt relatief lang zonder masker. Dit kan je AHI gemiddelde van de hele nacht ongemerkt omhoog halen.";
-            }
-
-            container.innerHTML = advice;
+            document.getElementById('aiResponse').innerHTML = msg;
         }
 
-        function switchTab(tabId, el) {
+        function showTab(id, btn) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
 
         function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(history));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "slaap_export.json");
-            downloadAnchorNode.click();
+            const blob = new Blob([JSON.stringify(history)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'slaap_data_rob.json'; a.click();
         }
 
         function clearData() {
-            if(confirm("Alles wissen?")) { localStorage.removeItem('sleepHistory'); location.reload(); }
+            if(confirm("Zeker weten? Dit verwijdert alle nachten.")) {
+                localStorage.removeItem('sleepHistory'); location.reload();
+            }
         }
     </script>
 </body>
