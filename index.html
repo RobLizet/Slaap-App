@@ -3,57 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Slaap & CPAP Pro v3.0</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E?v=3">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E?v=3">
-    
+    <title>Slaap & CPAP Pro v3.2</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E?v=5">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --bg: #0b0e14; --card: rgba(255,255,255,0.06); --blue: #38bdf8; --purple: #a855f7; --green: #4ade80; --red: #fb7185; --nav: #161b22; }
         body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-bottom: 90px; }
-        h1 { font-size: 20px; color: var(--blue); text-align: center; margin-bottom: 15px; letter-spacing: -0.5px; }
-        
+        h1 { font-size: 20px; color: var(--blue); text-align: center; margin-bottom: 15px; }
         .input-card { background: rgba(56, 189, 248, 0.04); padding: 15px; border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.2); margin-bottom: 20px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         label { font-size: 10px; color: #94a3b8; text-transform: uppercase; display: block; margin-bottom: 4px; font-weight: 600; }
-        input, textarea { background: #010409; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 14px; transition: border 0.2s; }
-        input:focus { border-color: var(--blue); outline: none; }
-        
-        .btn-main { background: var(--blue); color: #0b0e14; border: none; padding: 14px; border-radius: 12px; font-weight: 800; width: 100%; margin-top: 12px; font-size: 15px; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.2); }
+        input, textarea { background: #010409; border: 1px solid #30363d; color: white; padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 14px; }
+        .btn-main { background: var(--blue); color: #0b0e14; border: none; padding: 14px; border-radius: 12px; font-weight: 800; width: 100%; margin-top: 12px; font-size: 15px; }
         .card { background: var(--card); padding: 15px; border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+        .tab-content.active { display: block; }
         .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav); display: grid; grid-template-columns: 1fr 1fr; padding: 10px 0; border-top: 1px solid #30363d; z-index: 1000; }
-        .nav-btn { color: #8b949e; text-align: center; font-size: 12px; font-weight: 600; cursor: pointer; border: none; background: none; transition: 0.2s; }
+        .nav-btn { color: #8b949e; text-align: center; font-size: 12px; font-weight: 600; cursor: pointer; border: none; background: none; }
         .nav-btn.active { color: var(--blue); }
         .nav-btn svg { display: block; margin: 0 auto 4px; width: 20px; height: 20px; fill: currentColor; }
-
         .legend { display: flex; justify-content: center; gap: 15px; font-size: 10px; margin-bottom: 10px; font-weight: bold; }
-        .signature { text-align: center; font-family: 'Snell Roundhand', cursive; font-size: 12px; color: #484f58; margin-top: 30px; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        table { width: 100%; border-collapse: collapse; }
         td { padding: 10px 0; border-top: 1px solid #30363d; }
         .badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .del-btn { color: var(--red); background: none; border: none; font-size: 18px; padding: 0 10px; cursor: pointer; }
+        .btn-small { background: #21262d; color: #c9d1d9; border: none; padding: 8px; border-radius: 6px; font-size: 11px; flex: 1; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <h1>Slaap & CPAP Totaal</h1>
+    <h1>Slaap & CPAP Dashboard</h1>
 
     <div id="dashboard" class="tab-content active">
         <div class="input-card">
             <div class="grid">
-                <div><label>AHI (myAir)</label><input type="number" id="inAHI" step="0.1" placeholder="bijv. 1.4"></div>
+                <div><label>AHI (myAir)</label><input type="number" id="inAHI" step="0.1" placeholder="1.4"></div>
                 <div><label>Met Masker</label><input type="text" id="inSlaap" placeholder="5:21"></div>
                 <div><label>Diepe Slaap</label><input type="text" id="inDiep" placeholder="0:45"></div>
                 <div><label>REM Slaap</label><input type="text" id="inREM" placeholder="1:10"></div>
                 <div><label>Zonder Masker</label><input type="text" id="inZonder" placeholder="1:00"></div>
                 <div><label>Lek</label><input type="text" id="inLek" placeholder="Goed"></div>
             </div>
-            <textarea id="inNote" style="margin-top:10px" placeholder="Notitie over de nacht..."></textarea>
+            <textarea id="inNote" style="margin-top:10px" placeholder="Notitie..."></textarea>
             <button class="btn-main" onclick="addEntry()">Nacht Opslaan</button>
         </div>
 
@@ -67,35 +58,33 @@
         </div>
 
         <div class="card">
-            <span style="font-weight:bold; font-size:14px;">Logboek</span>
+            <span style="font-weight:bold; font-size:14px; display:block; margin-bottom:10px;">Logboek</span>
             <table id="historyTable"><tbody></tbody></table>
-            <div style="display:flex; gap:8px; margin-top:15px;">
-                <button onclick="exportData()" style="flex:1; background:#21262d; color:#c9d1d9; border:none; padding:8px; border-radius:6px; font-size:12px;">Backup</button>
-                <button onclick="clearData()" style="flex:1; background:rgba(251,113,133,0.1); color:var(--red); border:none; padding:8px; border-radius:6px; font-size:12px;">Alles Wissen</button>
+            
+            <div style="display:flex; gap:5px; margin-top:20px; flex-wrap: wrap;">
+                <button class="btn-small" onclick="exportData()">Backup</button>
+                <button class="btn-small" onclick="document.getElementById('importFile').click()">Herstellen</button>
+                <button class="btn-small" style="color:var(--red);" onclick="clearData()">Leegmaken</button>
+                <input type="file" id="importFile" style="display:none" onchange="importData(event)">
             </div>
         </div>
-        
-        <div class="signature">Made by Rob Borghouts 2026</div>
+        <div style="text-align: center; font-size: 11px; color: #484f58; margin-top: 20px;">Made by Rob Borghouts 2026</div>
     </div>
 
     <div id="analyse" class="tab-content">
         <div class="card" style="text-align:center; padding:30px 20px;">
-            <div style="font-size:40px; margin-bottom:15px;">🧠</div>
-            <h2 style="margin:0; color:var(--blue);">AI Slaap Coach</h2>
-            <div id="aiResponse" style="text-align:left; margin-top:20px; line-height:1.6; font-size:14px;">
-                Voer minimaal 2 nachten in voor een diepgaande analyse.
-            </div>
+            <div style="font-size:40px;">🧠</div>
+            <h2 style="color:var(--blue);">AI Coach</h2>
+            <div id="aiResponse" style="text-align:left; margin-top:20px; line-height:1.6; font-size:14px;">Voer data in...</div>
         </div>
     </div>
 
     <div class="navbar">
         <button class="nav-btn active" onclick="showTab('dashboard', this)">
-            <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-            Dashboard
+            <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg> Dashboard
         </button>
         <button class="nav-btn" onclick="showTab('analyse', this)">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-            AI Analyse
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> AI Analyse
         </button>
     </div>
 
@@ -118,16 +107,16 @@
                 data: {
                     labels: history.map(h => h.date),
                     datasets: [
-                        { label: 'AHI', data: history.map(h => h.ahi), borderColor: '#38bdf8', yAxisID: 'y', tension: 0.3, pointRadius: 4 },
-                        { label: 'REM', data: history.map(h => tToM(h.rem)), borderColor: '#a855f7', yAxisID: 'y1', tension: 0.3, pointRadius: 0 },
-                        { label: 'Diep', data: history.map(h => tToM(h.diep)), borderColor: '#4ade80', yAxisID: 'y1', tension: 0.3, pointRadius: 0 }
+                        { label: 'AHI', data: history.map(h => h.ahi), borderColor: '#38bdf8', yAxisID: 'y', tension: 0.3, pointRadius: 4, pointBackgroundColor: '#38bdf8' },
+                        { label: 'REM', data: history.map(h => tToM(h.rem)), borderColor: '#a855f7', yAxisID: 'y1', tension: 0.3, pointRadius: 4, pointBackgroundColor: '#a855f7' },
+                        { label: 'Diep', data: history.map(h => tToM(h.diep)), borderColor: '#4ade80', yAxisID: 'y1', tension: 0.3, pointRadius: 4, pointBackgroundColor: '#4ade80' }
                     ]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     scales: {
-                        y: { position: 'left', grid: { color: '#30363d' }, title: { display: true, text: 'AHI', color: '#38bdf8' } },
-                        y1: { position: 'right', grid: { display: false }, title: { display: true, text: 'Minuten', color: '#94a3b8' } }
+                        y: { position: 'left', beginAtZero: true, title: { display: true, text: 'AHI', color: '#38bdf8' }, grid: { color: '#30363d' } },
+                        y1: { position: 'right', beginAtZero: true, title: { display: true, text: 'Minuten', color: '#94a3b8' }, grid: { display: false } }
                     },
                     plugins: { legend: { display: false } }
                 }
@@ -136,17 +125,27 @@
 
         function addEntry() {
             const d = {
+                id: Date.now(),
                 ahi: parseFloat(document.getElementById('inAHI').value) || 0,
                 rem: document.getElementById('inREM').value || '0:00',
                 diep: document.getElementById('inDiep').value || '0:00',
                 slaap: document.getElementById('inSlaap').value || '-',
                 zonder: document.getElementById('inZonder').value || '0:00',
-                lek: document.getElementById('inLek').value || '-',
                 note: document.getElementById('inNote').value || '',
                 date: new Date().toLocaleDateString('nl-NL', {day:'2-digit', month:'2-digit'})
             };
             history.push(d);
-            if(history.length > 30) history.shift();
+            save();
+        }
+
+        function deleteEntry(id) {
+            if(confirm("Deze nacht verwijderen?")) {
+                history = history.filter(h => h.id !== id);
+                save();
+            }
+        }
+
+        function save() {
             localStorage.setItem('sleepHistory', JSON.stringify(history));
             location.reload();
         }
@@ -156,30 +155,41 @@
             tbody.innerHTML = history.slice().reverse().map(h => `
                 <tr>
                     <td><strong>${h.date}</strong><br><small style="color:#8b949e">${h.slaap} (+${h.zonder})</small></td>
-                    <td align="right"><span class="badge" style="background:${h.ahi<5?'rgba(74,222,128,0.1)':'rgba(251,113,133,0.1)'}; color:${h.ahi<5?'#4ade80':'#fb7185'}">AHI ${h.ahi}</span><br>
-                    <small style="color:#8b949e">R:${h.rem} D:${h.diep}</small></td>
+                    <td align="right">
+                        <span class="badge" style="background:${h.ahi<5?'rgba(74,222,128,0.1)':'rgba(251,113,133,0.1)'}; color:${h.ahi<5?'#4ade80':'#fb7185'}">AHI ${h.ahi}</span><br>
+                        <small style="color:#8b949e">R:${h.rem} D:${h.diep}</small>
+                    </td>
+                    <td align="right" style="width:40px;"><button class="del-btn" onclick="deleteEntry(${h.id})">×</button></td>
                 </tr>
-                ${h.note ? `<tr><td colspan="2" style="border-top:none; padding-top:0; font-size:10px; color:#8b949e; font-style:italic;">"${h.note}"</td></tr>` : ''}
             `).join('');
         }
 
+        function exportData() {
+            const blob = new Blob([JSON.stringify(history)], {type: 'application/json'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob); a.download = 'slaap_backup.json'; a.click();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if(Array.isArray(data)) {
+                        history = data;
+                        save();
+                    }
+                } catch(err) { alert("Fout bij laden van bestand."); }
+            };
+            reader.readAsText(file);
+        }
+
         function doAI() {
-            if(history.length < 2) return;
+            if(history.length < 1) return;
             const last = history[history.length-1];
-            const avgAHI = history.reduce((s,n)=>s+n.ahi,0)/history.length;
-            const totalQual = tToM(last.rem) + tToM(last.diep);
-            
-            let msg = `Vannacht was je AHI <b>${last.ahi}</b>. `;
-            if(last.ahi < avgAHI) msg += `Dat is beter dan je gemiddelde van ${avgAHI.toFixed(1)}! 📈<br><br>`;
-            else msg += `Iets hoger dan gemiddeld, maar geen zorgen. <br><br>`;
-
-            msg += `<b>Kwaliteit check:</b> Je had ${totalQual} min aan diepe en REM slaap. `;
-            if(totalQual < 100) msg += `Dit is relatief laag voor een volledige nacht herstel. Probeer vanavond iets eerder rust te vinden. 🧘‍♂️`;
-            else msg += `Dat is een sterke score voor herstel! Je brein en lichaam hebben goed kunnen opladen. ⚡`;
-
-            if(tToM(last.zonder) > 45) msg += `<br><br>⚠️ <b>Let op:</b> Je sliep ${last.zonder} zonder masker. Dit kan de reden zijn voor een licht verhoogde AHI score.`;
-
-            document.getElementById('aiResponse').innerHTML = msg;
+            document.getElementById('aiResponse').innerHTML = `Laatste AHI: <b>${last.ahi}</b>. Kwaliteitsslaap: ${tToM(last.rem)+tToM(last.diep)} min.`;
         }
 
         function showTab(id, btn) {
@@ -189,18 +199,7 @@
             btn.classList.add('active');
         }
 
-        function exportData() {
-            const blob = new Blob([JSON.stringify(history)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = 'slaap_data_rob.json'; a.click();
-        }
-
-        function clearData() {
-            if(confirm("Zeker weten? Dit verwijdert alle nachten.")) {
-                localStorage.removeItem('sleepHistory'); location.reload();
-            }
-        }
+        function clearData() { if(confirm("Alles wissen?")) { localStorage.removeItem('sleepHistory'); location.reload(); } }
     </script>
 </body>
 </html>
