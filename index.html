@@ -3,24 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slaap CPAP Pro v2.6</title>
+    <title>Slaap CPAP Pro v2.7</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%230ea5e9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23a)'/%3E%3Ctext x='50%25' y='60%25' font-family='sans-serif' font-weight='bold' font-size='50' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --bg: #0b0e14; --card: rgba(255,255,255,0.07); --blue: #38bdf8; --purple: #a855f7; --green: #4ade80; --red: #fb7185; }
-        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; padding: 10px; margin: 0; padding-bottom: 50px; }
+        body { background: var(--bg); color: #e2e8f0; font-family: -apple-system, sans-serif; padding: 10px; margin: 0; padding-bottom: 70px; }
         h1 { font-size: 18px; color: var(--blue); text-align: center; margin: 10px 0; }
+        
         .input-section { background: rgba(56, 189, 248, 0.05); padding: 12px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(56, 189, 248, 0.3); }
         .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         label { display: block; font-size: 9px; color: #94a3b8; text-transform: uppercase; margin-bottom: 2px; }
         input, textarea { background: #0f172a; border: 1px solid #334155; color: white; padding: 8px; border-radius: 6px; width: 100%; box-sizing: border-box; font-size: 13px; }
         button { background: var(--blue); border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; cursor: pointer; color: #0b0e14; margin-top: 8px; }
+
         .card { background: var(--card); padding: 12px; border-radius: 14px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); }
         .chart-box { height: 200px; }
+        
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
         .btn-alt { background: transparent; color: #94a3b8; border: 1px solid #334155; font-size: 12px; padding: 8px; }
         .btn-danger { color: var(--red); border-color: var(--red); }
+        
         table { width: 100%; border-collapse: collapse; font-size: 11px; }
         td { padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+        
+        /* Je persoonlijke signatuur onderaan */
+        .signature { text-align: center; font-family: 'Snell Roundhand', 'Brush Script MT', cursive; font-style: italic; font-size: 12px; color: #64748b; margin-top: 25px; margin-bottom: 15px; opacity: 0.8; }
     </style>
 </head>
 <body>
@@ -54,6 +62,10 @@
         </div>
     </div>
 
+    <div class="signature">
+        Made by Rob Borghouts 2026
+    </div>
+
     <script>
         let history = JSON.parse(localStorage.getItem('sleepHistory')) || [];
         let trendChart;
@@ -73,14 +85,14 @@
                 data: {
                     labels: history.map(h => h.date),
                     datasets: [
-                        { label: 'AHI', data: history.map(h => h.ahi), borderColor: '#38bdf8', tension: 0.4, yAxisID: 'y' },
-                        { label: 'REM', data: history.map(h => timeToMin(h.rem)), borderColor: '#a855f7', tension: 0.4, yAxisID: 'y1' }
+                        { label: 'AHI', data: history.map(h => h.ahi), borderColor: '#38bdf8', tension: 0.4, yAxisID: 'y', pointRadius: 4, pointBackgroundColor: '#38bdf8' },
+                        { label: 'REM', data: history.map(h => timeToMin(h.rem)), borderColor: '#a855f7', tension: 0.4, yAxisID: 'y1', pointRadius: 4, pointBackgroundColor: '#a855f7' }
                     ]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     scales: {
-                        y: { type: 'linear', display: true, position: 'left', title: {display:true, text:'AHI', color:'#38bdf8'} },
+                        y: { type: 'linear', display: true, position: 'left', title: {display:true, text:'AHI', color:'#38bdf8'}, grid: {color: 'rgba(255,255,255,0.05)'} },
                         y1: { type: 'linear', display: true, position: 'right', grid: {drawOnChartArea: false}, title: {display:true, text:'REM (min)', color:'#a855f7'} }
                     },
                     plugins: { legend: { display: false } }
