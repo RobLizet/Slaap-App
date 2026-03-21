@@ -1,245 +1,694 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Slaap & CPAP Pro v3.7</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2338bdf8'/%3E%3Cstop offset='100%25' stop-color='%2310b981'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23g)'/%3E%3Ctext x='50%25' y='67%25' font-family='Arial' font-weight='900' font-size='55' fill='%230b0e14' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root { 
-            --bg: #fdf6e3; --card: #ffffff; --blue: #38bdf8; --purple: #a855f7; 
-            --green: #10b981; --red: #fb7185; --text: #484f58; --nav: #f3f4f6; 
-            --input-bg: #f9fafb; --border: #e5e7eb; --grid: #f3f4f6;
-        }
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Slaap Rob"/>
+<meta name="theme-color" content="#0d1b2a"/>
+<title>Slaap Rob</title>
+<style>
+:root{
+  --bg:#111e2e;--card:#172436;--card2:#142032;
+  --text:#e8f0fe;--muted:rgba(232,240,254,.55);
+  --border:rgba(100,160,220,.12);--shadow:0 6px 24px rgba(0,0,0,.3);
+  --radius:16px;
+  --blue:#7ab8e8;--teal:#5ecfb8;--purple:#b8a0e0;
+  --orange:#e8c080;--red:#e89090;--green:#7ecfa0;
+  --accent:var(--blue);
+}
+html[data-theme="light"]{
+  --bg:#f4f7fb;--card:#ffffff;--card2:#f0f4f8;
+  --text:#0d1b2a;--muted:rgba(13,27,42,.55);
+  --border:rgba(74,130,200,.15);--shadow:0 6px 20px rgba(74,130,200,.08);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:-apple-system,system-ui,sans-serif;margin:0;background:var(--bg);color:var(--text);min-height:100vh;}
 
-        body.dark-mode {
-            --bg: #0b0e14; --card: #161b22; --text: #e2e8f0; --nav: #010409;
-            --input-bg: #010409; --border: #30363d; --grid: #30363d;
-        }
+header{padding:14px 16px 0;position:sticky;top:0;z-index:10;background:var(–bg);border-bottom:1px solid var(–border);backdrop-filter:blur(8px);}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+h1{margin:0;font-size:20px;font-weight:800;letter-spacing:-.5px;}
+.sync-dot{width:9px;height:9px;border-radius:50%;background:#555;display:inline-block;margin-left:6px;vertical-align:middle;}
 
-        body { background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; margin: 0; padding: 15px; padding-bottom: 90px; transition: 0.3s; }
-        h1 { font-size: 20px; color: var(--blue); text-align: center; margin-bottom: 15px; font-weight: 800; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        
-        .input-card { background: var(--card); padding: 15px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        label { font-size: 10px; color: #94a3b8; text-transform: uppercase; display: block; margin-bottom: 4px; font-weight: 700; }
-        input, textarea { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; font-size: 14px; }
-        
-        .btn-main { background: var(--blue); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 800; width: 100%; margin-top: 10px; font-size: 15px; }
-        .card { background: var(--card); padding: 15px; border-radius: 16px; margin-bottom: 12px; border: 1px solid var(--border); }
-        
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:7px 14px;border-radius:20px;border:1px solid var(–border);background:transparent;cursor:pointer;font-size:12px;font-weight:600;color:var(–muted);white-space:nowrap;transition:all .2s;}
+.tab.active{background:rgba(122,184,232,.85);border-color:rgba(122,184,232,.85);color:#0d1b2a;}
 
-        .navbar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--border); }
-        .nav-btn { color: #94a3b8; text-align: center; font-size: 12px; font-weight: 600; cursor: pointer; border: none; background: none; flex: 1; }
-        .nav-btn.active { color: var(--blue); }
-        .nav-btn svg { display: block; margin: 0 auto 4px; width: 22px; height: 22px; fill: currentColor; }
+main{padding:14px 16px 120px;max-width:720px;margin:0 auto;}
+.view{display:none;}.view.active{display:block;}
 
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 12px 0; border-top: 1px solid var(--border); }
-        .badge { font-size: 10px; padding: 3px 8px; border-radius: 6px; font-weight: bold; }
-        .del-btn { color: var(--red); background: none; border: none; font-size: 22px; cursor: pointer; }
-        .btn-small { background: var(--nav); color: var(--text); border: none; padding: 8px; border-radius: 6px; font-size: 11px; flex: 1; font-weight: 600; cursor: pointer; }
-        .signature { text-align: center; font-family: 'Snell Roundhand', cursive; font-size: 12px; color: #94a3b8; margin-top: 20px; }
-    </style>
+.card{background:var(–card);border:1px solid var(–border);border-radius:var(–radius);padding:16px;margin-bottom:14px;box-shadow:var(–shadow);}
+.card-title{font-weight:800;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.card-title .icon{font-size:18px;}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+@media(max-width:400px){.grid3{grid-template-columns:1fr 1fr;}.grid2{grid-template-columns:1fr;}}
+
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:11px;color:var(–muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+input[type=“number”],input[type=“text”],input[type=“time”],input[type=“date”],select,textarea{
+background:var(–card2);border:1px solid var(–border);color:var(–text);
+border-radius:10px;padding:10px 12px;font-size:14px;width:100%;
+-webkit-appearance:none;outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(–blue);}
+textarea{min-height:70px;resize:vertical;}
+
+.btn{border:1px solid var(–border);background:var(–card2);padding:10px 16px;border-radius:12px;cursor:pointer;color:var(–text);font-size:13px;font-weight:600;}
+.btn.primary{background:rgba(122,184,232,.8);border-color:rgba(122,184,232,.8);color:#0d1b2a;}
+.btn.sm{padding:6px 12px;font-size:12px;border-radius:8px;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+
+.score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px;}
+.score-card{background:var(–card);border:1px solid var(–border);border-radius:14px;padding:12px;text-align:center;}
+.score-card .val{font-size:26px;font-weight:900;line-height:1;}
+.score-card .lbl{font-size:10px;color:var(–muted);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.score-card.good .val{color:var(–green);}
+.score-card.warn .val{color:var(–orange);}
+.score-card.bad .val{color:var(–red);}
+.score-card.blue .val{color:var(–blue);}
+.score-card.purple .val{color:var(–purple);}
+
+input[type=“range”]{-webkit-appearance:none;width:100%;height:8px;border-radius:6px;background:var(–border);outline:none;cursor:pointer;}
+input[type=“range”]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(–accent);border:2px solid var(–bg);cursor:pointer;}
+.slider-labels{display:flex;justify-content:space-between;font-size:10px;color:var(–muted);margin-top:2px;}
+
+.mood-row{display:flex;gap:8px;justify-content:space-between;}
+.mood-btn{flex:1;font-size:26px;background:var(–card2);border:2px solid var(–border);border-radius:12px;padding:8px 4px;cursor:pointer;text-align:center;transition:all .15s;}
+.mood-btn.active{border-color:var(–purple);background:rgba(184,160,224,.15);}
+
+.seal-row{display:flex;gap:8px;}
+.seal-btn{flex:1;padding:10px;border-radius:12px;border:2px solid var(–border);background:var(–card2);cursor:pointer;font-size:13px;font-weight:700;text-align:center;transition:all .15s;}
+.seal-btn.ok{border-color:var(–green);background:rgba(126,207,160,.12);color:var(–green);}
+.seal-btn.warn{border-color:var(–orange);background:rgba(232,192,128,.12);color:var(–orange);}
+
+.chart{display:flex;align-items:flex-end;gap:3px;height:80px;margin:8px 0;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;justify-content:flex-end;}
+.bar{width:100%;border-radius:4px 4px 0 0;min-height:3px;}
+.bar-lbl{font-size:8px;color:var(–muted);text-align:center;}
+
+.hist-item{display:grid;grid-template-columns:90px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(–border);align-items:start;}
+.hist-item:last-child{border-bottom:none;}
+.hist-date{font-size:11px;font-weight:700;color:var(–muted);}
+.hist-vals{display:flex;flex-wrap:wrap;gap:5px;}
+.chip{background:var(–card2);border:1px solid var(–border);border-radius:6px;padding:3px 7px;font-size:11px;font-weight:600;}
+.chip.g{border-color:var(–green);color:var(–green);}
+.chip.w{border-color:var(–orange);color:var(–orange);}
+.chip.b{border-color:var(–red);color:var(–red);}
+.chip.p{border-color:var(–purple);color:var(–purple);}
+.chip.bl{border-color:var(–blue);color:var(–blue);}
+
+.toast{position:fixed;left:16px;right:16px;bottom:90px;background:rgba(10,20,40,.96);color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:50;font-size:13px;text-align:center;border:1px solid var(–border);}
+
+.sep{height:1px;background:var(–border);margin:12px 0;}
+
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(–border);}
+.stat-row:last-child{border-bottom:none;}
+.stat-lbl{font-size:13px;color:var(–muted);}
+.stat-val{font-size:14px;font-weight:800;}
+
+.period-row{display:flex;gap:6px;margin-bottom:14px;}
+.period-btn{padding:6px 14px;border-radius:20px;border:1px solid var(–border);background:transparent;color:var(–muted);font-size:12px;font-weight:600;cursor:pointer;}
+.period-btn.active{background:rgba(94,207,184,.75);border-color:rgba(94,207,184,.75);color:#0d1b2a;}
+
+footer{position:fixed;left:0;right:0;bottom:0;padding:8px 16px;background:var(–bg);border-top:1px solid var(–border);z-index:10;}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;max-width:720px;margin:0 auto;}
+</style>
+
 </head>
 <body>
 
-    <h1>
-        Slaap & CPAP Pro
-    </h1>
+<header>
+  <div class="header-top">
+    <h1>Slaap <span style="color:var(--blue)">Rob</span> <span class="sync-dot" id="syncDot"></span></h1>
+    <button class="btn sm" id="btnTheme">🌙</button>
+  </div>
+  <div class="tabs">
+    <div class="tab active" data-view="log">Log</div>
+    <div class="tab" data-view="welzijn">Welzijn</div>
+    <div class="tab" data-view="trends">Trends</div>
+    <div class="tab" data-view="rapport">Rapport</div>
+  </div>
+</header>
 
-    <div id="dashboard" class="tab-content active">
-        <div class="input-card">
-            <div class="grid">
-                <div><label>AHI (myAir)</label><input type="number" id="inAHI" step="0.1" placeholder="1.4"></div>
-                <div><label>Met Masker</label><input type="text" id="inSlaap" placeholder="5:21"></div>
-                <div><label>Diepe Slaap</label><input type="text" id="inDiep" placeholder="0:45"></div>
-                <div><label>REM Slaap</label><input type="text" id="inREM" placeholder="1:10"></div>
-                <div><label>Zonder Masker</label><input type="text" id="inZonder" placeholder="1:00"></div>
-                <div><label>Lek (L/min)</label><input type="text" id="inLek" placeholder="Goed"></div>
-            </div>
-            <textarea id="inNote" style="margin-top:10px" placeholder="Notitie..."></textarea>
-            <button class="btn-main" onclick="addEntry()">Nacht Opslaan & Update Widget</button>
-        </div>
+<main>
 
-        <div class="card">
-            <div style="height: 230px;"><canvas id="sleepChart"></canvas></div>
-        </div>
+<div id="log" class="view active">
+  <div class="score-grid">
+    <div class="score-card blue"><div class="val" id="sc_ahi">--</div><div class="lbl">AHI</div></div>
+    <div class="score-card" id="sc_sealCard"><div class="val" id="sc_seal">--</div><div class="lbl">Masker</div></div>
+    <div class="score-card purple"><div class="val" id="sc_uren">--</div><div class="lbl">Slaapuren</div></div>
+    <div class="score-card" id="sc_qualCard"><div class="val" id="sc_qual">--</div><div class="lbl">Kwaliteit</div></div>
+  </div>
 
-        <div class="card">
-            <span style="font-weight:bold; font-size:14px; display:block; margin-bottom:10px;">Geschiedenis</span>
-            <table id="historyTable"><tbody></tbody></table>
-            
-            <div style="display:flex; gap:8px; margin-top:20px;">
-                <button class="btn-small" onclick="save()">Backup</button>
-                <button class="btn-small" onclick="document.getElementById('importFile').click()">Herstellen</button>
-                <button class="btn-small" style="color:var(--red);" onclick="clearData()">Wissen</button>
-                <input type="file" id="importFile" style="display:none" onchange="importData(event)" accept=".json">
-            </div>
-        </div>
-        <div class="signature">Made by Rob Borghouts 2026</div>
+  <div class="card">
+    <div class="card-title"><span class="icon">📅</span>Datum</div>
+    <input type="date" id="datePicker"/>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">😴</span>CPAP / MyAir</div>
+    <div class="grid2">
+      <div class="field"><label>AHI (ademstops/uur)</label><input type="number" id="ahi" step="0.1" min="0" placeholder="bijv. 2.4"/></div>
+      <div class="field"><label>Masker uren:min</label><input type="text" id="maskUren" placeholder="bijv. 7:23"/></div>
     </div>
-
-    <div id="analyse" class="tab-content">
-        <div class="card" style="text-align:center; padding:30px 20px;">
-            <div style="font-size:40px; margin-bottom:10px;">🧠</div>
-            <h2 style="color:var(--blue); margin:0;">AI Coach</h2>
-            <div id="aiResponse" style="text-align:left; margin-top:20px; line-height:1.7; font-size:14px;">Wacht op data...</div>
-        </div>
+    <div class="sep"></div>
+    <div class="field" style="margin-bottom:10px;"><label>Maskerdichting</label></div>
+    <div class="seal-row">
+      <div class="seal-btn" id="sealGoed" onclick="setSeal('goed')">OK Goed</div>
+      <div class="seal-btn" id="sealAfstellen" onclick="setSeal('afstellen')">Afstellen</div>
+      <div class="seal-btn" id="sealSlecht" onclick="setSeal('slecht')">Slecht</div>
     </div>
+  </div>
 
-    <div class="navbar">
-        <button class="nav-btn active" onclick="showTab('dashboard', this)">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> Dashboard
-        </button>
-        <button class="nav-btn" onclick="toggleDarkMode()">
-            <svg id="themeIcon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg> Thema
-        </button>
-        <button class="nav-btn" onclick="showTab('analyse', this)">
-            <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg> AI Coach
-        </button>
+  <div class="card">
+    <div class="card-title"><span class="icon">🛏</span>Slaaptijden</div>
+    <div class="grid2">
+      <div class="field"><label>Slaaptijd (werkelijk)</label><input type="text" id="sleepTotal" placeholder="bijv. 6:45"/></div>
+      <div class="field"><label>Naar bed</label><input type="time" id="bedTime"/></div>
+      <div class="field"><label>Wakker</label><input type="time" id="wakeTime"/></div>
+      <div class="field"><label>Slaapkwaliteit (1-10)</label><input type="number" id="sleepQual" min="1" max="10" placeholder="1-10"/></div>
     </div>
+    <div class="sep"></div>
+    <div class="grid2">
+      <div class="field"><label>REM slaap %</label><input type="number" id="remPct" min="0" max="100" placeholder="bijv. 22"/></div>
+      <div class="field"><label>Diepe slaap %</label><input type="number" id="deepPct" min="0" max="100" placeholder="bijv. 18"/></div>
+    </div>
+    <div class="sep"></div>
+    <div class="field"><label>Notitie slaap</label><textarea id="sleepNote" placeholder="Bijv. laat ingeslapen, dromen, onrustig..."></textarea></div>
+  </div>
 
-    <script>
-        let history = JSON.parse(localStorage.getItem('sleepHistory')) || [];
-        let sleepChart;
+  <div class="btn-row">
+    <button class="btn primary" id="btnSave">Opslaan</button>
+    <button class="btn" id="btnClear">Wis dag</button>
+  </div>
+</div>
 
-        function tToM(t) {
-            if(!t || !t.includes(':')) return 0;
-            const [h, m] = t.split(':').map(Number);
-            return (h * 60) + m;
-        }
+<div id="welzijn" class="view">
+  <div class="card">
+    <div class="card-title"><span class="icon">📅</span>Datum</div>
+    <input type="date" id="welzijnDate"/>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">⚖️</span>Gewicht</div>
+    <div class="field"><label>Gewicht (kg)</label><input type="number" id="weight" step="0.1" min="30" max="300" placeholder="bijv. 82.5"/></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">Pijn</span>Pijn (1-10)</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <span style="font-size:12px;color:var(--muted)">Geen</span>
+      <span style="font-size:24px;font-weight:900;" id="painDisplay">5</span>
+      <span style="font-size:12px;color:var(--muted)">Erg</span>
+    </div>
+    <input type="range" min="1" max="10" value="5" id="painSlider" oninput="document.getElementById('painDisplay').textContent=this.value"/>
+    <div class="slider-labels"><span>1</span><span>5</span><span>10</span></div>
+    <div class="field" style="margin-top:10px;"><label>Locatie / opmerking</label><input type="text" id="painNote" placeholder="Bijv. rug, hoofd..."/></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">Energie</span>Energie (1-10)</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <span style="font-size:12px;color:var(--muted)">Leeg</span>
+      <span style="font-size:24px;font-weight:900;color:var(--orange);" id="energyDisplay">5</span>
+      <span style="font-size:12px;color:var(--muted)">Vol</span>
+    </div>
+    <input type="range" min="1" max="10" value="5" id="energySlider" oninput="document.getElementById('energyDisplay').textContent=this.value" style="accent-color:var(--orange)"/>
+    <div class="slider-labels"><span>1</span><span>5</span><span>10</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">Stemming</span>Gemoedstoestand</div>
+    <div class="mood-row">
+      <div class="mood-btn" data-mood="1" onclick="setMood(1)">😢</div>
+      <div class="mood-btn" data-mood="2" onclick="setMood(2)">😞</div>
+      <div class="mood-btn" data-mood="3" onclick="setMood(3)">😐</div>
+      <div class="mood-btn" data-mood="4" onclick="setMood(4)">🙂</div>
+      <div class="mood-btn" data-mood="5" onclick="setMood(5)">😄</div>
+    </div>
+    <div style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px;" id="moodLabel">Tik op een emoji</div>
+    <div class="field" style="margin-top:10px;"><label>Notitie stemming</label><input type="text" id="moodNote" placeholder="Bijv. gestrest, rustig..."/></div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon">Triggers</span>Triggers</div>
+    <div class="field"><label>Wat beinvloedde je slaap?</label><input type="text" id="triggers" placeholder="Bijv. koffie, stress, alcohol, sport..."/></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;" id="triggerChips"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn primary" id="btnSaveWelzijn">Opslaan</button>
+  </div>
+  <div class="card" style="margin-top:6px;">
+    <div class="card-title"><span class="icon">Overzicht</span>Laatste 7 dagen</div>
+    <div id="welzijnHist"></div>
+  </div>
+</div>
 
-        window.onload = function() {
-            if(localStorage.getItem('darkMode') === 'enabled') {
-                document.body.classList.add('dark-mode');
-                updateThemeIcon(true);
-            }
-            initChart(); updateUI(); doAI();
-        };
+<div id="trends" class="view">
+  <div class="period-row">
+    <div class="period-btn active" data-days="7">7d</div>
+    <div class="period-btn" data-days="14">14d</div>
+    <div class="period-btn" data-days="30">30d</div>
+  </div>
+  <div class="card">
+    <div class="card-title">AHI (ademstops/uur)</div>
+    <div class="chart" id="chartAhi"></div>
+    <div id="statsAhi" style="font-size:12px;color:var(--muted);margin-top:4px;"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Slaapuren</div>
+    <div class="chart" id="chartUren"></div>
+    <div id="statsUren" style="font-size:12px;color:var(--muted);margin-top:4px;"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">REM &amp; Diepe slaap %</div>
+    <div class="chart" id="chartSlaap"></div>
+    <div style="display:flex;gap:10px;margin-top:6px;font-size:11px;">
+      <span style="color:var(--purple);">REM</span>
+      <span style="color:var(--teal);">Diep</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Gewicht</div>
+    <div class="chart" id="chartGewicht"></div>
+    <div id="statsGewicht" style="font-size:12px;color:var(--muted);margin-top:4px;"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Pijn &amp; Energie</div>
+    <div class="chart" id="chartPijnEnergie"></div>
+    <div style="display:flex;gap:10px;margin-top:6px;font-size:11px;">
+      <span style="color:var(--red);">Pijn</span>
+      <span style="color:var(--orange);">Energie</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Gemoedstoestand</div>
+    <div class="chart" id="chartMood"></div>
+  </div>
+</div>
 
-        function toggleDarkMode() {
-            const isDark = document.body.classList.toggle('dark-mode');
-            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-            updateThemeIcon(isDark);
-            initChart(); // Ververs grafiekkleuren
-        }
+<div id="rapport" class="view">
+  <div class="card">
+    <div class="card-title">Weekgemiddelden</div>
+    <div id="weekStats"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">AHI beoordeling</div>
+    <div id="ahiBeoordeling" style="font-size:13px;line-height:1.7;"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Geschiedenis (30 dagen)</div>
+    <div id="histList"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn" id="btnExport">Export backup</button>
+    <label class="btn" for="importFile">Import</label>
+    <input type="file" id="importFile" accept="application/json" style="display:none;"/>
+    <button class="btn" id="btnCopyRapport">Kopieer rapport</button>
+  </div>
+</div>
 
-        function updateThemeIcon(isDark) {
-            const path = document.querySelector('#themeIcon path');
-            if(isDark) {
-                path.setAttribute('d', 'M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.38.39-1.02 0-1.41zM5.99 18.01l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0z');
-            } else {
-                path.setAttribute('d', 'M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z');
-            }
-        }
+</main>
 
-        function initChart() {
-            const ctx = document.getElementById('sleepChart').getContext('2d');
-            const isDark = document.body.classList.contains('dark-mode');
-            const gridColor = isDark ? '#30363d' : '#f3f4f6';
-            
-            const maxMins = history.length > 0 ? Math.max(...history.map(h => Math.max(tToM(h.rem), tToM(h.diep)))) : 60;
-            const y1Limit = Math.max(80, Math.ceil((maxMins + 20) / 20) * 20);
+<div class="toast" id="toast"></div>
 
-            if (sleepChart) sleepChart.destroy();
+<footer>
+  <div class="footer-inner">
+    <span style="font-size:11px;color:var(--muted);" id="footerNext"></span>
+    <span style="font-size:11px;color:var(--muted);">Rob Borghouts App 2026</span>
+  </div>
+</footer>
 
-            sleepChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: history.map(h => h.date),
-                    datasets: [
-                        { label: 'AHI', data: history.map(h => h.ahi), borderColor: '#38bdf8', yAxisID: 'y', tension: 0.3, pointRadius: 5, pointBackgroundColor: '#38bdf8' },
-                        { label: 'REM', data: history.map(h => tToM(h.rem)), borderColor: '#a855f7', yAxisID: 'y1', tension: 0.3, pointRadius: 5, pointBackgroundColor: '#a855f7' },
-                        { label: 'Diep', data: history.map(h => tToM(h.diep)), borderColor: '#10b981', yAxisID: 'y1', tension: 0.3, pointRadius: 5, pointBackgroundColor: '#10b981' }
-                    ]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: {
-                        y: { position: 'left', beginAtZero: true, grid: { color: gridColor }, ticks: { color: '#38bdf8' } },
-                        y1: { position: 'right', beginAtZero: true, max: y1Limit, grid: { display: false }, ticks: { color: (ctx) => ctx.tick.value >= 60 ? '#a855f7' : '#10b981' } }
-                    },
-                    plugins: { legend: { display: false } }
-                }
-            });
-        }
+<script>
+const FB_URL = "https://slaaprob-default-rtdb.europe-west1.firebasedatabase.app/.json";
 
-        function addEntry() {
-            const d = {
-                id: Date.now(),
-                ahi: parseFloat(document.getElementById('inAHI').value) || 0,
-                rem: document.getElementById('inREM').value || '0:00',
-                diep: document.getElementById('inDiep').value || '0:00',
-                slaap: document.getElementById('inSlaap').value || '-',
-                zonder: document.getElementById('inZonder').value || '0:00',
-                note: document.getElementById('inNote').value || '',
-                date: new Date().toLocaleDateString('nl-NL', {day:'2-digit', month:'2-digit'})
-            };
-            history.push(d);
-            save();
-        }
+let __pushTimer = null;
+window.__importing = false;
+function syncKey(k){return k.startsWith("slaap:")||k.startsWith("welzijn:");}
+function schedulePush(){clearTimeout(__pushTimer);__pushTimer=setTimeout(doPush,2500);}
+async function doPush(){const dot=el("syncDot");try{const d={};for(const k of Object.keys(localStorage)){if(syncKey(k))d[k]=localStorage.getItem(k);}if(dot)dot.style.background="#e8c080";const r=await fetch(FB_URL,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({_blob:JSON.stringify(d),_ts:Date.now()})});if(dot)dot.style.background=r.ok?"#5ecfb8":"#e89090";if(!r.ok)toast("Sync fout: "+r.status);}catch(e){if(dot)dot.style.background="#e89090";toast("Sync fout");}}
+async function doPull(){const dot=el("syncDot");try{if(dot)dot.style.background="#e8c080";const r=await fetch(FB_URL);if(!r.ok){if(dot)dot.style.background="#e89090";return;}const json=await r.json();if(!json||!json._blob){if(dot)dot.style.background="#5ecfb8";return;}const data=JSON.parse(json._blob);let changed=false;for(const k of Object.keys(data)){if(syncKey(k)&&data[k]!=null){window.__importing=true;localStorage.setItem(k,String(data[k]));window.__importing=false;changed=true;}}if(dot)dot.style.background="#5ecfb8";}catch(e){if(dot)dot.style.background="#e89090";}}
+const __lsSet=localStorage.setItem.bind(localStorage);
+localStorage.setItem=function(k,v){__lsSet(k,v);if(!window.__importing&&syncKey(k))schedulePush();};
 
-        function deleteEntry(id) {
-            if(confirm("Verwijderen?")) { history = history.filter(h => h.id !== id); save(); }
-        }
+const el = id => document.getElementById(id);
+function ymd(d){ const z = new Date(d.getTime() - d.getTimezoneOffset()*60000); return z.toISOString().slice(0,10); }
+function today(){ return ymd(new Date()); }
+function toast(msg, dur=1800){ const t=el("toast"); t.textContent=msg; t.style.display="block"; clearTimeout(window.__toast); window.__toast=setTimeout(()=>t.style.display="none",dur); }
+function fmtDate(s){ try{ return new Date(s+"T00:00:00").toLocaleDateString("nl-NL",{weekday:"short",day:"2-digit",month:"2-digit"}); }catch(e){ return s; } }
+function parseHM(s){ if(!s) return 0; const p=s.split(":"); return parseInt(p[0]||0)*60+parseInt(p[1]||0); }
+function fmtHM(m){ if(!m&&m!==0) return "--"; return Math.floor(m/60)+"u"+String(m%60).padStart(2,"0"); }
 
-        function save() {
-            localStorage.setItem('sleepHistory', JSON.stringify(history));
-            const blob = new Blob([JSON.stringify(history)], {type: 'application/json'});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'slaap_data.json';
-            a.click();
-            setTimeout(() => { location.reload(); }, 500);
-        }
+function slaapKey(d){ return "slaap:"+d; }
+function welzijnKey(d){ return "welzijn:"+d; }
+function readSlaap(d){ try{ return JSON.parse(localStorage.getItem(slaapKey(d))||"null")||{}; }catch(e){ return {}; } }
+function writeSlaap(d,o){ localStorage.setItem(slaapKey(d), JSON.stringify(o)); }
+function readWelzijn(d){ try{ return JSON.parse(localStorage.getItem(welzijnKey(d))||"null")||{}; }catch(e){ return {}; } }
+function writeWelzijn(d,o){ localStorage.setItem(welzijnKey(d), JSON.stringify(o)); }
+function getDates(days){ const a=[]; for(let i=days-1;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); a.push(ymd(d)); } return a; }
 
-        function updateUI() {
-            const tbody = document.querySelector('#historyTable tbody');
-            tbody.innerHTML = history.slice().reverse().map(h => `
-                <tr>
-                    <td><strong>${h.date}</strong><br><small style="color:#94a3b8">${h.slaap} (+${h.zonder})</small></td>
-                    <td align="right">
-                        <span class="badge" style="background:${h.ahi<5?'rgba(16,185,129,0.1)':'rgba(251,113,133,0.1)'}; color:${h.ahi<5?'#10b981':'#fb7185'}">AHI ${h.ahi}</span><br>
-                        <small style="color:#94a3b8">R:${h.rem} D:${h.diep}</small>
-                    </td>
-                    <td align="right"><button class="del-btn" onclick="deleteEntry(${h.id})">×</button></td>
-                </tr>
-            `).join('');
-        }
+let __seal = "";
+function setSeal(val){
+  __seal = val;
+  ["sealGoed","sealAfstellen","sealSlecht"].forEach(id => el(id).className="seal-btn");
+  if(val==="goed") el("sealGoed").className="seal-btn ok";
+  else if(val==="afstellen") el("sealAfstellen").className="seal-btn warn";
+  else if(val==="slecht") el("sealSlecht").className="seal-btn warn";
+}
 
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if(Array.isArray(data)) { history = data; save(); }
-                } catch(err) { alert("Fout bij laden."); }
-            };
-            reader.readAsText(file);
-        }
+let __mood = 0;
+const moodLabels = ["","Heel slecht","Niet goed","Matig","Goed","Uitstekend"];
+function setMood(val){
+  __mood = val;
+  document.querySelectorAll(".mood-btn").forEach(b => b.classList.toggle("active", Number(b.dataset.mood)===val));
+  el("moodLabel").textContent = moodLabels[val]||"";
+}
 
-        function doAI() {
-            if(history.length < 1) return;
-            const last = history[history.length-1];
-            document.getElementById('aiResponse').innerHTML = `De laatste AHI was <b>${last.ahi}</b>. Slaapkwaliteit (R+D): ${tToM(last.rem)+tToM(last.diep)} min.`;
-        }
+function loadLog(date){
+  const s = readSlaap(date);
+  el("ahi").value = s.ahi!=null ? s.ahi : "";
+  el("maskUren").value = s.maskUren||"";
+  el("sleepTotal").value = s.sleepTotal||"";
+  el("bedTime").value = s.bedTime||"";
+  el("wakeTime").value = s.wakeTime||"";
+  el("sleepQual").value = s.sleepQual!=null ? s.sleepQual : "";
+  el("remPct").value = s.remPct!=null ? s.remPct : "";
+  el("deepPct").value = s.deepPct!=null ? s.deepPct : "";
+  el("sleepNote").value = s.sleepNote||"";
+  __seal = s.seal||"";
+  setSeal(__seal);
+  renderScoreCards(date);
+}
 
-        function showTab(id, btn) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
+function saveLog(){
+  const date = el("datePicker").value;
+  writeSlaap(date, {
+    ahi: el("ahi").value ? Number(el("ahi").value) : null,
+    maskUren: el("maskUren").value.trim(),
+    seal: __seal,
+    sleepTotal: el("sleepTotal").value.trim(),
+    bedTime: el("bedTime").value,
+    wakeTime: el("wakeTime").value,
+    sleepQual: el("sleepQual").value ? Number(el("sleepQual").value) : null,
+    remPct: el("remPct").value ? Number(el("remPct").value) : null,
+    deepPct: el("deepPct").value ? Number(el("deepPct").value) : null,
+    sleepNote: el("sleepNote").value.trim(),
+  });
+  toast("Slaaplog opgeslagen");
+  renderScoreCards(date);
+}
 
-        function clearData() { if(confirm("Alles wissen?")) { localStorage.removeItem('sleepHistory'); location.reload(); } }
-    </script>
+function clearLog(){
+  localStorage.removeItem(slaapKey(el("datePicker").value));
+  loadLog(el("datePicker").value);
+  toast("Gewist");
+}
+
+function renderScoreCards(date){
+  const s = readSlaap(date);
+  const ahi = s.ahi;
+  const ahiEl = el("sc_ahi");
+  if(ahi!=null){ ahiEl.textContent=ahi.toFixed(1); ahiEl.closest(".score-card").className="score-card "+(ahi<=5?"good":ahi<=15?"warn":"bad"); }
+  else ahiEl.textContent="--";
+  const sealEl=el("sc_seal"), sealCard=el("sc_sealCard");
+  if(s.seal==="goed"){ sealEl.textContent="OK"; sealCard.className="score-card good"; }
+  else if(s.seal==="afstellen"){ sealEl.textContent="!"; sealCard.className="score-card warn"; }
+  else if(s.seal==="slecht"){ sealEl.textContent="X"; sealCard.className="score-card bad"; }
+  else{ sealEl.textContent="--"; sealCard.className="score-card"; }
+  const urenEl=el("sc_uren");
+  if(s.sleepTotal){ const m=parseHM(s.sleepTotal); urenEl.textContent=fmtHM(m); urenEl.closest(".score-card").className="score-card "+(m>=420?"good":m>=360?"warn":"bad"); }
+  else urenEl.textContent="--";
+  const qualEl=el("sc_qual"), qualCard=el("sc_qualCard");
+  if(s.sleepQual!=null){ qualEl.textContent=s.sleepQual+"/10"; qualCard.className="score-card "+(s.sleepQual>=7?"good":s.sleepQual>=5?"warn":"bad"); }
+  else{ qualEl.textContent="--"; qualCard.className="score-card"; }
+  const w = readWelzijn(date);
+  const parts=[];
+  if(ahi!=null) parts.push("AHI "+ahi.toFixed(1));
+  if(s.sleepTotal) parts.push(s.sleepTotal+"u");
+  if(w.weight) parts.push(w.weight+"kg");
+  el("footerNext").textContent = parts.join(" · ")||"Nog geen data voor vandaag";
+}
+
+const TRIGGERS_QUICK = ["Koffie","Alcohol","Stress","Sport","Laat eten","Beeldscherm","Pijn","Warm","Lawaai"];
+
+function loadWelzijn(date){
+  const w = readWelzijn(date);
+  el("weight").value = w.weight!=null ? w.weight : "";
+  el("painSlider").value = w.pain!=null ? w.pain : 5;
+  el("painDisplay").textContent = el("painSlider").value;
+  el("painNote").value = w.painNote||"";
+  el("energySlider").value = w.energy!=null ? w.energy : 5;
+  el("energyDisplay").textContent = el("energySlider").value;
+  __mood = w.mood||0;
+  setMood(__mood);
+  el("moodNote").value = w.moodNote||"";
+  el("triggers").value = w.triggers||"";
+  renderWelzijnHist();
+}
+
+function saveWelzijn(){
+  const date = el("welzijnDate").value;
+  writeWelzijn(date, {
+    weight: el("weight").value ? Number(el("weight").value) : null,
+    pain: Number(el("painSlider").value),
+    painNote: el("painNote").value.trim(),
+    energy: Number(el("energySlider").value),
+    mood: __mood,
+    moodNote: el("moodNote").value.trim(),
+    triggers: el("triggers").value.trim(),
+  });
+  toast("Welzijn opgeslagen");
+  renderWelzijnHist();
+  renderScoreCards(el("datePicker").value);
+}
+
+function renderWelzijnHist(){
+  const box = el("welzijnHist");
+  const moodEmoji = ["","😢","😞","😐","🙂","😄"];
+  const dates = getDates(7).reverse();
+  box.innerHTML = dates.map(d => {
+    const w = readWelzijn(d);
+    if(!w||Object.keys(w).length===0) return "";
+    const chips=[];
+    if(w.weight) chips.push('<span class="chip bl">'+w.weight+'kg</span>');
+    if(w.pain!=null) chips.push('<span class="chip '+(w.pain<=3?"g":w.pain<=6?"w":"b")+'">Pijn '+w.pain+'</span>');
+    if(w.energy!=null) chips.push('<span class="chip w">E'+w.energy+'</span>');
+    if(w.mood) chips.push('<span class="chip p">'+moodEmoji[w.mood]+'</span>');
+    if(w.triggers) chips.push('<span class="chip">'+w.triggers.split(",")[0].trim()+'</span>');
+    if(chips.length===0) return "";
+    return '<div class="hist-item"><div class="hist-date">'+fmtDate(d)+'</div><div class="hist-vals">'+chips.join("")+'</div></div>';
+  }).filter(Boolean).join("")||'<span style="font-size:12px;color:var(--muted)">Nog geen data</span>';
+}
+
+let __trendDays = 7;
+
+function renderTrends(){
+  const dates = getDates(__trendDays);
+  const ev = Math.ceil(__trendDays/7);
+  renderChart("chartAhi", dates, d=>readSlaap(d).ahi, {color:v=>v==null?"var(--border)":v<=5?"var(--green)":v<=15?"var(--orange)":"var(--red)",max:20,label:d=>fmtDate(d).slice(0,5),showEvery:ev});
+  const ahiVals = dates.map(d=>readSlaap(d).ahi).filter(v=>v!=null);
+  if(ahiVals.length>0){ const avg=(ahiVals.reduce((a,b)=>a+b,0)/ahiVals.length).toFixed(1); el("statsAhi").textContent="Gem: "+avg+" | Min: "+Math.min(...ahiVals)+" | Max: "+Math.max(...ahiVals); }
+  else el("statsAhi").textContent="Geen data";
+  renderChart("chartUren", dates, d=>{const s=readSlaap(d).sleepTotal;return s?parseHM(s)/60:null;}, {color:v=>v==null?"var(--border)":v>=7?"var(--blue)":v>=6?"var(--orange)":"var(--red)",max:10,label:d=>fmtDate(d).slice(0,5),showEvery:ev});
+  const urenVals = dates.map(d=>{const s=readSlaap(d).sleepTotal;return s?parseHM(s)/60:null;}).filter(v=>v!=null);
+  if(urenVals.length>0){ el("statsUren").textContent="Gem: "+(urenVals.reduce((a,b)=>a+b,0)/urenVals.length).toFixed(1)+"u"; }
+  else el("statsUren").textContent="Geen data";
+  renderDualChart("chartSlaap", dates, d=>readSlaap(d).remPct, "var(--purple)", d=>readSlaap(d).deepPct, "var(--teal)", 100);
+  const gwVals = dates.map(d=>({d,v:readWelzijn(d).weight})).filter(x=>x.v!=null);
+  if(gwVals.length>0){
+    const mn=Math.min(...gwVals.map(x=>x.v))-1, mx=Math.max(...gwVals.map(x=>x.v))+1;
+    renderChart("chartGewicht", dates, d=>readWelzijn(d).weight, {color:()=>"var(--blue)",min:mn,max:mx,label:d=>fmtDate(d).slice(0,5),showEvery:ev});
+    const last=gwVals[gwVals.length-1].v, first=gwVals[0].v;
+    el("statsGewicht").textContent="Huidig: "+last+"kg | Trend: "+(last-first>=0?"+":"")+(last-first).toFixed(1)+"kg";
+  } else { el("chartGewicht").innerHTML=""; el("statsGewicht").textContent="Geen data"; }
+  renderDualChart("chartPijnEnergie", dates, d=>readWelzijn(d).pain, "var(--red)", d=>readWelzijn(d).energy, "var(--orange)", 10);
+  renderChart("chartMood", dates, d=>readWelzijn(d).mood||null, {color:v=>v==null?"var(--border)":v>=4?"var(--green)":v>=3?"var(--orange)":"var(--red)",max:5,label:d=>fmtDate(d).slice(0,5),showEvery:ev});
+}
+
+function renderChart(id, dates, getter, opts){
+  const wrap=el(id); if(!wrap) return;
+  const vals=dates.map(getter);
+  const defined=vals.filter(v=>v!=null);
+  const maxV=opts.max||Math.max(...defined,1);
+  const minV=opts.min||0;
+  const range=maxV-minV||1;
+  wrap.innerHTML="";
+  dates.forEach((d,i)=>{
+    const v=vals[i];
+    const col=document.createElement("div"); col.className="bar-col";
+    const bar=document.createElement("div"); bar.className="bar";
+    bar.style.height=(v!=null?Math.max(4,Math.round(((v-minV)/range)*72)):3)+"px";
+    bar.style.background=opts.color?opts.color(v):"var(--blue)";
+    col.appendChild(bar);
+    const show=opts.showEvery?(i%opts.showEvery===0||i===dates.length-1):true;
+    if(show){ const lbl=document.createElement("div"); lbl.className="bar-lbl"; lbl.textContent=opts.label?opts.label(d):d.slice(5); col.appendChild(lbl); }
+    wrap.appendChild(col);
+  });
+}
+
+function renderDualChart(id, dates, g1, c1, g2, c2, maxV){
+  const wrap=el(id); if(!wrap) return;
+  wrap.innerHTML="";
+  dates.forEach(d=>{
+    const v1=g1(d), v2=g2(d);
+    const col=document.createElement("div"); col.className="bar-col"; col.style.flexDirection="row"; col.style.gap="2px"; col.style.alignItems="flex-end"; col.style.justifyContent="center";
+    if(v1!=null){ const b=document.createElement("div"); b.style.cssText="width:45%;border-radius:3px 3px 0 0;background:"+c1+";height:"+Math.max(3,Math.round((v1/maxV)*72))+"px"; col.appendChild(b); }
+    if(v2!=null){ const b=document.createElement("div"); b.style.cssText="width:45%;border-radius:3px 3px 0 0;background:"+c2+";height:"+Math.max(3,Math.round((v2/maxV)*72))+"px"; col.appendChild(b); }
+    if(!v1&&!v2){ const b=document.createElement("div"); b.style.cssText="width:80%;height:3px;background:var(--border);border-radius:2px"; col.appendChild(b); }
+    wrap.appendChild(col);
+  });
+}
+
+function renderRapport(){
+  const dates=getDates(7);
+  const sd=dates.map(d=>readSlaap(d));
+  const wd=dates.map(d=>readWelzijn(d));
+  const avg=arr=>arr.length?(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1):"--";
+  const moodEmoji=["","😢","😞","😐","🙂","😄"];
+  const ahiVals=sd.map(s=>s.ahi).filter(v=>v!=null);
+  const urenVals=sd.map(s=>s.sleepTotal?parseHM(s.sleepTotal)/60:null).filter(v=>v!=null);
+  const qualVals=sd.map(s=>s.sleepQual).filter(v=>v!=null);
+  const remVals=sd.map(s=>s.remPct).filter(v=>v!=null);
+  const deepVals=sd.map(s=>s.deepPct).filter(v=>v!=null);
+  const wgVals=wd.map(w=>w.weight).filter(v=>v!=null);
+  const painVals=wd.map(w=>w.pain).filter(v=>v!=null);
+  const energyVals=wd.map(w=>w.energy).filter(v=>v!=null);
+  const moodVals=wd.map(w=>w.mood).filter(v=>v!=null);
+  const ahiAvg=avg(ahiVals);
+  el("weekStats").innerHTML=[
+    ["Gem. AHI", ahiAvg, ahiAvg!=="--"&&Number(ahiAvg)<=5?"var(--green)":Number(ahiAvg)<=15?"var(--orange)":"var(--red)"],
+    ["Gem. slaaptijd", urenVals.length?fmtHM(Math.round(Number(avg(urenVals))*60)):"--", ""],
+    ["Gem. kwaliteit", avg(qualVals)+"/10", ""],
+    ["Gem. REM", avg(remVals)+"%", ""],
+    ["Gem. diepe slaap", avg(deepVals)+"%", ""],
+    ["Gewicht", wgVals.length?wgVals[wgVals.length-1]+"kg":"--", ""],
+    ["Gem. pijn", avg(painVals)+"/10", ""],
+    ["Gem. energie", avg(energyVals)+"/10", ""],
+    ["Gem. stemming", moodVals.length?moodEmoji[Math.round(Number(avg(moodVals)))]+" "+avg(moodVals):"--", ""],
+  ].map(([l,v,c])=>'<div class="stat-row"><span class="stat-lbl">'+l+'</span><span class="stat-val"'+(c?' style="color:'+c+'"':'')+'>'+v+'</span></div>').join("");
+  const ahiN=ahiVals.length?Number(ahiAvg):null;
+  el("ahiBeoordeling").textContent = ahiN==null?"Nog niet genoeg data.":
+    ahiN<=5?"Uitstekend -- AHI "+ahiN+" is normaal (<5). De therapie werkt goed!":
+    ahiN<=15?"Licht verhoogd -- AHI "+ahiN+" (doel <5). Controleer maskerpasvorm.":
+    ahiN<=30?"Matig -- AHI "+ahiN+" (doel <5). Bespreek met arts.":
+    "Hoog -- AHI "+ahiN+" (doel <5). Dringend overleg met arts aanbevolen.";
+  const allDates=getDates(30).reverse();
+  el("histList").innerHTML=allDates.map(d=>{
+    const s=readSlaap(d), w=readWelzijn(d);
+    if(Object.keys(s).length===0&&Object.keys(w).length===0) return "";
+    const chips=[];
+    if(s.ahi!=null) chips.push('<span class="chip '+(s.ahi<=5?"g":s.ahi<=15?"w":"b")+'">AHI '+s.ahi+'</span>');
+    if(s.sleepTotal) chips.push('<span class="chip bl">'+s.sleepTotal+'</span>');
+    if(s.seal) chips.push('<span class="chip '+(s.seal==="goed"?"g":"w")+'">'+(s.seal==="goed"?"OK":"!")+'</span>');
+    if(s.remPct!=null) chips.push('<span class="chip p">REM '+s.remPct+'%</span>');
+    if(s.deepPct!=null) chips.push('<span class="chip" style="border-color:var(--teal);color:var(--teal)">Diep '+s.deepPct+'%</span>');
+    if(w.weight) chips.push('<span class="chip">'+w.weight+'kg</span>');
+    if(chips.length===0) return "";
+    return '<div class="hist-item"><div class="hist-date">'+fmtDate(d)+'</div><div class="hist-vals">'+chips.join("")+'</div></div>';
+  }).filter(Boolean).join("")||'<span style="font-size:12px;color:var(--muted)">Nog geen data</span>';
+}
+
+function buildRapportText(){
+  const dates=getDates(7);
+  const lines=["Slaaprapport Rob","Week van "+fmtDate(dates[0])+" tot "+fmtDate(dates[6]),""];
+  dates.forEach(d=>{
+    const s=readSlaap(d), w=readWelzijn(d);
+    if(Object.keys(s).length===0&&Object.keys(w).length===0) return;
+    const parts=[];
+    if(s.ahi!=null) parts.push("AHI "+s.ahi);
+    if(s.sleepTotal) parts.push(s.sleepTotal+"u");
+    if(s.sleepQual) parts.push("Kwal "+s.sleepQual+"/10");
+    if(w.weight) parts.push(w.weight+"kg");
+    if(w.energy) parts.push("E"+w.energy);
+    lines.push(fmtDate(d)+": "+parts.join(", "));
+  });
+  return lines.join("\n");
+}
+
+function exportBackup(){
+  const data={version:"slaap-v1",exportedAt:new Date().toISOString(),storage:{}};
+  for(const k of Object.keys(localStorage)){ if(syncKey(k)) data.storage[k]=localStorage.getItem(k); }
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="slaap-rob-"+today()+".json"; a.click(); URL.revokeObjectURL(a.href);
+  toast("Backup geexporteerd");
+}
+
+function importBackup(file){
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const data=JSON.parse(r.result);
+      if(!data.storage){ toast("Ongeldig bestand"); return; }
+      for(const k of Object.keys(data.storage)) localStorage.setItem(k,data.storage[k]);
+      toast("Geimporteerd -- herlaadt...");
+      setTimeout(()=>location.reload(),1200);
+    }catch(e){ toast("Fout: "+e.message); }
+  };
+  r.readAsText(file);
+}
+
+function applyTheme(t){
+  document.documentElement.dataset.theme = t;
+  el("btnTheme").textContent = t==="light" ? "🌙" : "☀️";
+  localStorage.setItem("slaap:theme", t);
+}
+
+function renderTriggerChips(){
+  const TRIGGERS = ["Koffie","Alcohol","Stress","Sport","Laat eten","Beeldscherm","Pijn","Warm","Lawaai"];
+  el("triggerChips").innerHTML = TRIGGERS.map(t=>'<span onclick="addTrigger(\''+t+'\')" style="cursor:pointer;background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px;">'+t+'</span>').join("");
+}
+
+function addTrigger(t){
+  const cur = el("triggers").value.trim();
+  el("triggers").value = cur ? (cur+", "+t) : t;
+}
+
+async function init(){
+  const savedTheme = localStorage.getItem("slaap:theme")||"light";
+  applyTheme(savedTheme);
+  el("btnTheme").addEventListener("click",()=>{ applyTheme(document.documentElement.dataset.theme==="dark"?"light":"dark"); });
+  el("datePicker").value = today();
+  el("welzijnDate").value = today();
+
+  await doPull();
+  loadLog(today());
+  loadWelzijn(today());
+
+  el("datePicker").addEventListener("change",()=>loadLog(el("datePicker").value));
+  el("btnSave").addEventListener("click",saveLog);
+  el("btnClear").addEventListener("click",clearLog);
+  el("welzijnDate").addEventListener("change",()=>loadWelzijn(el("welzijnDate").value));
+  el("btnSaveWelzijn").addEventListener("click",saveWelzijn);
+  renderTriggerChips();
+
+  document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+    const view=t.dataset.view;
+    document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===t));
+    document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===view));
+    if(view==="trends") renderTrends();
+    if(view==="rapport") renderRapport();
+    if(view==="welzijn") renderWelzijnHist();
+  }));
+
+  document.querySelectorAll(".period-btn").forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll(".period-btn").forEach(x=>x.classList.remove("active"));
+    b.classList.add("active");
+    __trendDays = Number(b.dataset.days);
+    renderTrends();
+  }));
+
+  el("btnExport").addEventListener("click",exportBackup);
+  el("importFile").addEventListener("change",ev=>{const f=ev.target.files[0];if(f)importBackup(f);ev.target.value="";});
+  el("btnCopyRapport").addEventListener("click",()=>{
+    navigator.clipboard.writeText(buildRapportText()).then(()=>toast("Gekopieerd")).catch(()=>toast("Kopieer mislukt"));
+  });
+
+  setInterval(()=>renderScoreCards(el("datePicker").value), 30000);
+  setInterval(()=>doPush(), 5*60*1000);
+}
+
+init();
+</script>
+
 </body>
 </html>
