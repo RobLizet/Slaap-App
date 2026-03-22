@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="nl">
 <head>
 <meta charset="utf-8"/>
@@ -26,102 +25,89 @@ html[data-theme="light"]{
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:-apple-system,system-ui,sans-serif;margin:0;background:var(--bg);color:var(--text);min-height:100vh;}
-
-header{padding:14px 16px 0;position:sticky;top:0;z-index:10;background:var(–bg);border-bottom:1px solid var(–border);backdrop-filter:blur(8px);}
+header{padding:14px 16px 0;position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(8px);}
 .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 h1{margin:0;font-size:20px;font-weight:800;letter-spacing:-.5px;}
 .sync-dot{width:9px;height:9px;border-radius:50%;background:#555;display:inline-block;margin-left:6px;vertical-align:middle;}
-
 .tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none;}
 .tabs::-webkit-scrollbar{display:none;}
-.tab{padding:7px 14px;border-radius:20px;border:1px solid var(–border);background:transparent;cursor:pointer;font-size:12px;font-weight:600;color:var(–muted);white-space:nowrap;transition:all .2s;}
+.tab{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;transition:all .2s;}
 .tab.active{background:rgba(122,184,232,.85);border-color:rgba(122,184,232,.85);color:#0d1b2a;}
-
 main{padding:14px 16px 120px;max-width:720px;margin:0 auto;}
 .view{display:none;}.view.active{display:block;}
-
-.card{background:var(–card);border:1px solid var(–border);border-radius:var(–radius);padding:16px;margin-bottom:14px;box-shadow:var(–shadow);}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);}
 .card-title{font-weight:800;font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .card-title .icon{font-size:18px;}
-
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
 @media(max-width:400px){.grid3{grid-template-columns:1fr 1fr;}.grid2{grid-template-columns:1fr;}}
-
 .field{display:flex;flex-direction:column;gap:5px;}
-.field label{font-size:11px;color:var(–muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
-input[type=“number”],input[type=“text”],input[type=“time”],input[type=“date”],select,textarea{
-background:var(–card2);border:1px solid var(–border);color:var(–text);
-border-radius:10px;padding:10px 12px;font-size:14px;width:100%;
--webkit-appearance:none;outline:none;
+.field label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+input[type="number"],input[type="text"],input[type="time"],input[type="date"],input[type="password"],select,textarea{
+  background:var(--card2);border:1px solid var(--border);color:var(--text);
+  border-radius:10px;padding:10px 12px;font-size:14px;width:100%;
+  -webkit-appearance:none;outline:none;
 }
-input:focus,select:focus,textarea:focus{border-color:var(–blue);}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);}
 textarea{min-height:70px;resize:vertical;}
-
-.btn{border:1px solid var(–border);background:var(–card2);padding:10px 16px;border-radius:12px;cursor:pointer;color:var(–text);font-size:13px;font-weight:600;}
+.btn{border:1px solid var(--border);background:var(--card2);padding:10px 16px;border-radius:12px;cursor:pointer;color:var(--text);font-size:13px;font-weight:600;}
 .btn.primary{background:rgba(122,184,232,.8);border-color:rgba(122,184,232,.8);color:#0d1b2a;}
+.btn.success{background:rgba(94,207,184,.8);border-color:rgba(94,207,184,.8);color:#0d1b2a;}
 .btn.sm{padding:6px 12px;font-size:12px;border-radius:8px;}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-
 .score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px;}
-.score-card{background:var(–card);border:1px solid var(–border);border-radius:14px;padding:12px;text-align:center;}
+.score-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center;}
 .score-card .val{font-size:26px;font-weight:900;line-height:1;}
-.score-card .lbl{font-size:10px;color:var(–muted);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
-.score-card.good .val{color:var(–green);}
-.score-card.warn .val{color:var(–orange);}
-.score-card.bad .val{color:var(–red);}
-.score-card.blue .val{color:var(–blue);}
-.score-card.purple .val{color:var(–purple);}
-
-input[type=“range”]{-webkit-appearance:none;width:100%;height:8px;border-radius:6px;background:var(–border);outline:none;cursor:pointer;}
-input[type=“range”]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(–accent);border:2px solid var(–bg);cursor:pointer;}
-.slider-labels{display:flex;justify-content:space-between;font-size:10px;color:var(–muted);margin-top:2px;}
-
+.score-card .lbl{font-size:10px;color:var(--muted);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.score-card.good .val{color:var(--green);}
+.score-card.warn .val{color:var(--orange);}
+.score-card.bad .val{color:var(--red);}
+.score-card.blue .val{color:var(--blue);}
+.score-card.purple .val{color:var(--purple);}
+input[type="range"]{-webkit-appearance:none;width:100%;height:8px;border-radius:6px;background:var(--border);outline:none;cursor:pointer;}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);cursor:pointer;}
+.slider-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:2px;}
 .mood-row{display:flex;gap:8px;justify-content:space-between;}
-.mood-btn{flex:1;font-size:26px;background:var(–card2);border:2px solid var(–border);border-radius:12px;padding:8px 4px;cursor:pointer;text-align:center;transition:all .15s;}
-.mood-btn.active{border-color:var(–purple);background:rgba(184,160,224,.15);}
-
+.mood-btn{flex:1;font-size:26px;background:var(--card2);border:2px solid var(--border);border-radius:12px;padding:8px 4px;cursor:pointer;text-align:center;transition:all .15s;}
+.mood-btn.active{border-color:var(--purple);background:rgba(184,160,224,.15);}
 .seal-row{display:flex;gap:8px;}
-.seal-btn{flex:1;padding:10px;border-radius:12px;border:2px solid var(–border);background:var(–card2);cursor:pointer;font-size:13px;font-weight:700;text-align:center;transition:all .15s;}
-.seal-btn.ok{border-color:var(–green);background:rgba(126,207,160,.12);color:var(–green);}
-.seal-btn.warn{border-color:var(–orange);background:rgba(232,192,128,.12);color:var(–orange);}
-
+.seal-btn{flex:1;padding:10px;border-radius:12px;border:2px solid var(--border);background:var(--card2);cursor:pointer;font-size:13px;font-weight:700;text-align:center;transition:all .15s;}
+.seal-btn.ok{border-color:var(--green);background:rgba(126,207,160,.12);color:var(--green);}
+.seal-btn.warn{border-color:var(--orange);background:rgba(232,192,128,.12);color:var(--orange);}
 .chart{display:flex;align-items:flex-end;gap:3px;height:80px;margin:8px 0;}
 .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;justify-content:flex-end;}
 .bar{width:100%;border-radius:4px 4px 0 0;min-height:3px;}
-.bar-lbl{font-size:8px;color:var(–muted);text-align:center;}
-
-.hist-item{display:grid;grid-template-columns:90px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(–border);align-items:start;}
+.bar-lbl{font-size:8px;color:var(--muted);text-align:center;}
+.hist-item{display:grid;grid-template-columns:90px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--border);align-items:start;}
 .hist-item:last-child{border-bottom:none;}
-.hist-date{font-size:11px;font-weight:700;color:var(–muted);}
+.hist-date{font-size:11px;font-weight:700;color:var(--muted);}
 .hist-vals{display:flex;flex-wrap:wrap;gap:5px;}
-.chip{background:var(–card2);border:1px solid var(–border);border-radius:6px;padding:3px 7px;font-size:11px;font-weight:600;}
-.chip.g{border-color:var(–green);color:var(–green);}
-.chip.w{border-color:var(–orange);color:var(–orange);}
-.chip.b{border-color:var(–red);color:var(–red);}
-.chip.p{border-color:var(–purple);color:var(–purple);}
-.chip.bl{border-color:var(–blue);color:var(–blue);}
-
-.toast{position:fixed;left:16px;right:16px;bottom:90px;background:rgba(10,20,40,.96);color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:50;font-size:13px;text-align:center;border:1px solid var(–border);}
-
-.sep{height:1px;background:var(–border);margin:12px 0;}
-
-.stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(–border);}
+.chip{background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:3px 7px;font-size:11px;font-weight:600;}
+.chip.g{border-color:var(--green);color:var(--green);}
+.chip.w{border-color:var(--orange);color:var(--orange);}
+.chip.b{border-color:var(--red);color:var(--red);}
+.chip.p{border-color:var(--purple);color:var(--purple);}
+.chip.bl{border-color:var(--blue);color:var(--blue);}
+.toast{position:fixed;left:16px;right:16px;bottom:90px;background:rgba(10,20,40,.96);color:#fff;padding:10px 14px;border-radius:12px;display:none;z-index:50;font-size:13px;text-align:center;border:1px solid var(--border);}
+.sep{height:1px;background:var(--border);margin:12px 0;}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);}
 .stat-row:last-child{border-bottom:none;}
-.stat-lbl{font-size:13px;color:var(–muted);}
+.stat-lbl{font-size:13px;color:var(--muted);}
 .stat-val{font-size:14px;font-weight:800;}
-
 .period-row{display:flex;gap:6px;margin-bottom:14px;}
-.period-btn{padding:6px 14px;border-radius:20px;border:1px solid var(–border);background:transparent;color:var(–muted);font-size:12px;font-weight:600;cursor:pointer;}
+.period-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;}
 .period-btn.active{background:rgba(94,207,184,.75);border-color:rgba(94,207,184,.75);color:#0d1b2a;}
-
-footer{position:fixed;left:0;right:0;bottom:0;padding:8px 16px;background:var(–bg);border-top:1px solid var(–border);z-index:10;}
+footer{position:fixed;left:0;right:0;bottom:0;padding:8px 16px;background:var(--bg);border-top:1px solid var(--border);z-index:10;}
 .footer-inner{display:flex;justify-content:space-between;align-items:center;max-width:720px;margin:0 auto;}
-</style>
 
+/* myAir sync sectie */
+.myair-box{background:rgba(94,207,184,.08);border:1px solid rgba(94,207,184,.25);border-radius:12px;padding:12px;margin-top:12px;}
+.myair-status{font-size:12px;color:var(--teal);margin-top:8px;min-height:18px;font-weight:600;}
+.myair-creds{display:none;margin-top:10px;}
+.myair-creds.show{display:block;}
+</style>
 </head>
 <body>
-
 <header>
   <div class="header-top">
     <h1>Slaap <span style="color:var(--blue)">Rob</span> <span class="sync-dot" id="syncDot"></span></h1>
@@ -136,7 +122,6 @@ footer{position:fixed;left:0;right:0;bottom:0;padding:8px 16px;background:var(�
 </header>
 
 <main>
-
 <div id="log" class="view active">
   <div class="score-grid">
     <div class="score-card blue"><div class="val" id="sc_ahi">--</div><div class="lbl">AHI</div></div>
@@ -162,6 +147,26 @@ footer{position:fixed;left:0;right:0;bottom:0;padding:8px 16px;background:var(�
       <div class="seal-btn" id="sealGoed" onclick="setSeal('goed')">OK Goed</div>
       <div class="seal-btn" id="sealAfstellen" onclick="setSeal('afstellen')">Afstellen</div>
       <div class="seal-btn" id="sealSlecht" onclick="setSeal('slecht')">Slecht</div>
+    </div>
+
+    <!-- myAir Sync sectie -->
+    <div class="myair-box">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:13px;font-weight:700;color:var(--teal);">🔄 Sync myAir</span>
+        <div style="display:flex;gap:8px;">
+          <button class="btn sm" id="btnMyAirSettings" onclick="toggleMyAirCreds()">⚙️</button>
+          <button class="btn sm success" id="btnMyAirSync" onclick="syncMyAir()">Sync</button>
+        </div>
+      </div>
+      <div class="myair-creds" id="myAirCreds">
+        <div class="grid2" style="margin-top:8px;">
+          <div class="field"><label>myAir e-mail</label><input type="text" id="myairUser" placeholder="naam@email.com" autocomplete="username"/></div>
+          <div class="field"><label>myAir wachtwoord</label><input type="password" id="myairPass" autocomplete="current-password"/></div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;">Inloggegevens worden alleen lokaal opgeslagen op dit apparaat.</div>
+        <button class="btn sm primary" style="margin-top:8px;" onclick="saveMyAirCreds()">Opslaan</button>
+      </div>
+      <div class="myair-status" id="myAirStatus"></div>
     </div>
   </div>
 
@@ -250,56 +255,18 @@ footer{position:fixed;left:0;right:0;bottom:0;padding:8px 16px;background:var(�
     <div class="period-btn" data-days="14">14d</div>
     <div class="period-btn" data-days="30">30d</div>
   </div>
-  <div class="card">
-    <div class="card-title">AHI (ademstops/uur)</div>
-    <div class="chart" id="chartAhi"></div>
-    <div id="statsAhi" style="font-size:12px;color:var(--muted);margin-top:4px;"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Slaapuren</div>
-    <div class="chart" id="chartUren"></div>
-    <div id="statsUren" style="font-size:12px;color:var(--muted);margin-top:4px;"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">REM &amp; Diepe slaap %</div>
-    <div class="chart" id="chartSlaap"></div>
-    <div style="display:flex;gap:10px;margin-top:6px;font-size:11px;">
-      <span style="color:var(--purple);">REM</span>
-      <span style="color:var(--teal);">Diep</span>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Gewicht</div>
-    <div class="chart" id="chartGewicht"></div>
-    <div id="statsGewicht" style="font-size:12px;color:var(--muted);margin-top:4px;"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Pijn &amp; Energie</div>
-    <div class="chart" id="chartPijnEnergie"></div>
-    <div style="display:flex;gap:10px;margin-top:6px;font-size:11px;">
-      <span style="color:var(--red);">Pijn</span>
-      <span style="color:var(--orange);">Energie</span>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Gemoedstoestand</div>
-    <div class="chart" id="chartMood"></div>
-  </div>
+  <div class="card"><div class="card-title">AHI (ademstops/uur)</div><div class="chart" id="chartAhi"></div><div id="statsAhi" style="font-size:12px;color:var(--muted);margin-top:4px;"></div></div>
+  <div class="card"><div class="card-title">Slaapuren</div><div class="chart" id="chartUren"></div><div id="statsUren" style="font-size:12px;color:var(--muted);margin-top:4px;"></div></div>
+  <div class="card"><div class="card-title">REM &amp; Diepe slaap %</div><div class="chart" id="chartSlaap"></div><div style="display:flex;gap:10px;margin-top:6px;font-size:11px;"><span style="color:var(--purple);">REM</span><span style="color:var(--teal);">Diep</span></div></div>
+  <div class="card"><div class="card-title">Gewicht</div><div class="chart" id="chartGewicht"></div><div id="statsGewicht" style="font-size:12px;color:var(--muted);margin-top:4px;"></div></div>
+  <div class="card"><div class="card-title">Pijn &amp; Energie</div><div class="chart" id="chartPijnEnergie"></div><div style="display:flex;gap:10px;margin-top:6px;font-size:11px;"><span style="color:var(--red);">Pijn</span><span style="color:var(--orange);">Energie</span></div></div>
+  <div class="card"><div class="card-title">Gemoedstoestand</div><div class="chart" id="chartMood"></div></div>
 </div>
 
 <div id="rapport" class="view">
-  <div class="card">
-    <div class="card-title">Weekgemiddelden</div>
-    <div id="weekStats"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">AHI beoordeling</div>
-    <div id="ahiBeoordeling" style="font-size:13px;line-height:1.7;"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Geschiedenis (30 dagen)</div>
-    <div id="histList"></div>
-  </div>
+  <div class="card"><div class="card-title">Weekgemiddelden</div><div id="weekStats"></div></div>
+  <div class="card"><div class="card-title">AHI beoordeling</div><div id="ahiBeoordeling" style="font-size:13px;line-height:1.7;"></div></div>
+  <div class="card"><div class="card-title">Geschiedenis (30 dagen)</div><div id="histList"></div></div>
   <div class="btn-row">
     <button class="btn" id="btnExport">Export backup</button>
     <label class="btn" for="importFile">Import</label>
@@ -307,11 +274,9 @@ footer{position:fixed;left:0;right:0;bottom:0;padding:8px 16px;background:var(�
     <button class="btn" id="btnCopyRapport">Kopieer rapport</button>
   </div>
 </div>
-
 </main>
 
 <div class="toast" id="toast"></div>
-
 <footer>
   <div class="footer-inner">
     <span style="font-size:11px;color:var(--muted);" id="footerNext"></span>
@@ -321,12 +286,14 @@ footer{position:fixed;left:0;right:0;bottom:0;padding:8px 16px;background:var(�
 
 <script>
 const FB_URL = "https://slaaprob-default-rtdb.europe-west1.firebasedatabase.app/slaap.json";
+const MYAIR_PROXY = "https://slaaprobv2.netlify.app/.netlify/functions/myair";
 let __pushTimer = null;
 window.__importing = false;
+
 function syncKey(k){return k.startsWith("slaap:")||k.startsWith("welzijn:");}
 function schedulePush(){clearTimeout(__pushTimer);__pushTimer=setTimeout(doPush,2500);}
 async function doPush(){const dot=el("syncDot");try{const d={};for(const k of Object.keys(localStorage)){if(syncKey(k))d[k]=localStorage.getItem(k);}if(dot)dot.style.background="#e8c080";const r=await fetch(FB_URL,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({_blob:JSON.stringify(d),_ts:Date.now()})});if(dot)dot.style.background=r.ok?"#5ecfb8":"#e89090";if(!r.ok)toast("Sync fout: "+r.status);}catch(e){if(dot)dot.style.background="#e89090";toast("Sync fout");}}
-async function doPull(){const dot=el("syncDot");try{if(dot)dot.style.background="#e8c080";const r=await fetch(FB_URL);if(!r.ok){if(dot)dot.style.background="#e89090";return;}const json=await r.json();if(!json||!json._blob){if(dot)dot.style.background="#5ecfb8";return;}const data=JSON.parse(json._blob);let changed=false;for(const k of Object.keys(data)){if(syncKey(k)&&data[k]!=null){window.__importing=true;localStorage.setItem(k,String(data[k]));window.__importing=false;changed=true;}}if(dot)dot.style.background="#5ecfb8";}catch(e){if(dot)dot.style.background="#e89090";}}
+async function doPull(){const dot=el("syncDot");try{if(dot)dot.style.background="#e8c080";const r=await fetch(FB_URL);if(!r.ok){if(dot)dot.style.background="#e89090";return;}const json=await r.json();if(!json||!json._blob){if(dot)dot.style.background="#5ecfb8";return;}const data=JSON.parse(json._blob);for(const k of Object.keys(data)){if(syncKey(k)&&data[k]!=null){window.__importing=true;localStorage.setItem(k,String(data[k]));window.__importing=false;}}if(dot)dot.style.background="#5ecfb8";}catch(e){if(dot)dot.style.background="#e89090";}}
 const __lsSet=localStorage.setItem.bind(localStorage);
 localStorage.setItem=function(k,v){__lsSet(k,v);if(!window.__importing&&syncKey(k))schedulePush();};
 
@@ -337,7 +304,6 @@ function toast(msg, dur=1800){ const t=el("toast"); t.textContent=msg; t.style.d
 function fmtDate(s){ try{ return new Date(s+"T00:00:00").toLocaleDateString("nl-NL",{weekday:"short",day:"2-digit",month:"2-digit"}); }catch(e){ return s; } }
 function parseHM(s){ if(!s) return 0; const p=s.split(":"); return parseInt(p[0]||0)*60+parseInt(p[1]||0); }
 function fmtHM(m){ if(!m&&m!==0) return "--"; return Math.floor(m/60)+"u"+String(m%60).padStart(2,"0"); }
-
 function slaapKey(d){ return "slaap:"+d; }
 function welzijnKey(d){ return "welzijn:"+d; }
 function readSlaap(d){ try{ return JSON.parse(localStorage.getItem(slaapKey(d))||"null")||{}; }catch(e){ return {}; } }
@@ -345,6 +311,62 @@ function writeSlaap(d,o){ localStorage.setItem(slaapKey(d), JSON.stringify(o)); 
 function readWelzijn(d){ try{ return JSON.parse(localStorage.getItem(welzijnKey(d))||"null")||{}; }catch(e){ return {}; } }
 function writeWelzijn(d,o){ localStorage.setItem(welzijnKey(d), JSON.stringify(o)); }
 function getDates(days){ const a=[]; for(let i=days-1;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); a.push(ymd(d)); } return a; }
+
+// --- myAir sync ---
+function toggleMyAirCreds(){
+  const box = el("myAirCreds");
+  box.classList.toggle("show");
+  if(box.classList.contains("show")){
+    el("myairUser").value = localStorage.getItem("myair:user")||"";
+    el("myairPass").value = localStorage.getItem("myair:pass")||"";
+  }
+}
+function saveMyAirCreds(){
+  __lsSet("myair:user", el("myairUser").value.trim());
+  __lsSet("myair:pass", el("myairPass").value);
+  el("myAirCreds").classList.remove("show");
+  el("myAirStatus").textContent = "Inloggegevens opgeslagen ✓";
+  setTimeout(()=>el("myAirStatus").textContent="", 2000);
+}
+async function syncMyAir(){
+  const user = localStorage.getItem("myair:user");
+  const pass = localStorage.getItem("myair:pass");
+  if(!user||!pass){
+    el("myAirStatus").textContent = "⚙️ Vul eerst je inloggegevens in";
+    el("myAirCreds").classList.add("show");
+    el("myairUser").value = user||"";
+    el("myairPass").value = pass||"";
+    return;
+  }
+  const date = el("datePicker").value || today();
+  const btn = el("btnMyAirSync");
+  btn.textContent = "⏳"; btn.disabled = true;
+  el("myAirStatus").textContent = "Verbinden met myAir...";
+  try{
+    const res = await fetch(MYAIR_PROXY, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({username: user, password: pass, date})
+    });
+    const data = await res.json();
+    if(!res.ok || !data.success){
+      el("myAirStatus").textContent = "❌ " + (data.error||"Onbekende fout");
+      return;
+    }
+    // Vul de velden in
+    if(data.ahi != null){ el("ahi").value = data.ahi; }
+    if(data.maskUren){ el("maskUren").value = data.maskUren; }
+    if(data.seal){ setSeal(data.seal); }
+    el("myAirStatus").textContent = "✅ Gesynchroniseerd! AHI: "+(data.ahi??"-")+" | Masker: "+(data.maskUren||"-");
+    // Sla meteen op
+    saveLog();
+    toast("myAir data opgehaald en opgeslagen");
+  } catch(e){
+    el("myAirStatus").textContent = "❌ Verbindingsfout: " + e.message;
+  } finally {
+    btn.textContent = "Sync"; btn.disabled = false;
+  }
+}
 
 let __seal = "";
 function setSeal(val){
@@ -428,8 +450,6 @@ function renderScoreCards(date){
   el("footerNext").textContent = parts.join(" · ")||"Nog geen data voor vandaag";
 }
 
-const TRIGGERS_QUICK = ["Koffie","Alcohol","Stress","Sport","Laat eten","Beeldscherm","Pijn","Warm","Lawaai"];
-
 function loadWelzijn(date){
   const w = readWelzijn(date);
   el("weight").value = w.weight!=null ? w.weight : "";
@@ -480,7 +500,6 @@ function renderWelzijnHist(){
 }
 
 let __trendDays = 7;
-
 function renderTrends(){
   const dates = getDates(__trendDays);
   const ev = Math.ceil(__trendDays/7);
@@ -648,18 +667,15 @@ async function init(){
   el("btnTheme").addEventListener("click",()=>{ applyTheme(document.documentElement.dataset.theme==="dark"?"light":"dark"); });
   el("datePicker").value = today();
   el("welzijnDate").value = today();
-
   await doPull();
   loadLog(today());
   loadWelzijn(today());
-
   el("datePicker").addEventListener("change",()=>loadLog(el("datePicker").value));
   el("btnSave").addEventListener("click",saveLog);
   el("btnClear").addEventListener("click",clearLog);
   el("welzijnDate").addEventListener("change",()=>loadWelzijn(el("welzijnDate").value));
   el("btnSaveWelzijn").addEventListener("click",saveWelzijn);
   renderTriggerChips();
-
   document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
     const view=t.dataset.view;
     document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===t));
@@ -668,26 +684,22 @@ async function init(){
     if(view==="rapport") renderRapport();
     if(view==="welzijn") renderWelzijnHist();
   }));
-
   document.querySelectorAll(".period-btn").forEach(b=>b.addEventListener("click",()=>{
     document.querySelectorAll(".period-btn").forEach(x=>x.classList.remove("active"));
     b.classList.add("active");
     __trendDays = Number(b.dataset.days);
     renderTrends();
   }));
-
   el("btnExport").addEventListener("click",exportBackup);
   el("importFile").addEventListener("change",ev=>{const f=ev.target.files[0];if(f)importBackup(f);ev.target.value="";});
   el("btnCopyRapport").addEventListener("click",()=>{
     navigator.clipboard.writeText(buildRapportText()).then(()=>toast("Gekopieerd")).catch(()=>toast("Kopieer mislukt"));
   });
-
   setInterval(()=>renderScoreCards(el("datePicker").value), 30000);
   setInterval(()=>doPush(), 5*60*1000);
 }
 
 init();
 </script>
-
 </body>
 </html>
