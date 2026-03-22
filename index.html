@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="nl">
 <head>
 <meta charset="utf-8"/>
@@ -100,11 +101,6 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;hei
 footer{position:fixed;left:0;right:0;bottom:0;padding:8px 16px;background:var(--bg);border-top:1px solid var(--border);z-index:10;}
 .footer-inner{display:flex;justify-content:space-between;align-items:center;max-width:720px;margin:0 auto;}
 
-/* myAir sync sectie */
-.myair-box{background:rgba(94,207,184,.08);border:1px solid rgba(94,207,184,.25);border-radius:12px;padding:12px;margin-top:12px;}
-.myair-status{font-size:12px;color:var(--teal);margin-top:8px;min-height:18px;font-weight:600;}
-.myair-creds{display:none;margin-top:10px;}
-.myair-creds.show{display:block;}
 </style>
 </head>
 <body>
@@ -149,25 +145,6 @@ footer{position:fixed;left:0;right:0;bottom:0;padding:8px 16px;background:var(--
       <div class="seal-btn" id="sealSlecht" onclick="setSeal('slecht')">Slecht</div>
     </div>
 
-    <!-- myAir Sync sectie -->
-    <div class="myair-box">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:13px;font-weight:700;color:var(--teal);">🔄 Sync myAir</span>
-        <div style="display:flex;gap:8px;">
-          <button class="btn sm" id="btnMyAirSettings" onclick="toggleMyAirCreds()">⚙️</button>
-          <button class="btn sm success" id="btnMyAirSync" onclick="syncMyAir()">Sync</button>
-        </div>
-      </div>
-      <div class="myair-creds" id="myAirCreds">
-        <div class="grid2" style="margin-top:8px;">
-          <div class="field"><label>myAir e-mail</label><input type="text" id="myairUser" placeholder="naam@email.com" autocomplete="username"/></div>
-          <div class="field"><label>myAir wachtwoord</label><input type="password" id="myairPass" autocomplete="current-password"/></div>
-        </div>
-        <div style="font-size:11px;color:var(--muted);margin-top:6px;">Inloggegevens worden alleen lokaal opgeslagen op dit apparaat.</div>
-        <button class="btn sm primary" style="margin-top:8px;" onclick="saveMyAirCreds()">Opslaan</button>
-      </div>
-      <div class="myair-status" id="myAirStatus"></div>
-    </div>
   </div>
 
   <div class="card">
@@ -286,7 +263,6 @@ footer{position:fixed;left:0;right:0;bottom:0;padding:8px 16px;background:var(--
 
 <script>
 const FB_URL = "https://slaaprob-default-rtdb.europe-west1.firebasedatabase.app/slaap.json";
-const MYAIR_PROXY = "https://slaaprobv2.netlify.app/.netlify/functions/myair";
 let __pushTimer = null;
 window.__importing = false;
 
@@ -311,62 +287,6 @@ function writeSlaap(d,o){ localStorage.setItem(slaapKey(d), JSON.stringify(o)); 
 function readWelzijn(d){ try{ return JSON.parse(localStorage.getItem(welzijnKey(d))||"null")||{}; }catch(e){ return {}; } }
 function writeWelzijn(d,o){ localStorage.setItem(welzijnKey(d), JSON.stringify(o)); }
 function getDates(days){ const a=[]; for(let i=days-1;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); a.push(ymd(d)); } return a; }
-
-// --- myAir sync ---
-function toggleMyAirCreds(){
-  const box = el("myAirCreds");
-  box.classList.toggle("show");
-  if(box.classList.contains("show")){
-    el("myairUser").value = localStorage.getItem("myair:user")||"";
-    el("myairPass").value = localStorage.getItem("myair:pass")||"";
-  }
-}
-function saveMyAirCreds(){
-  __lsSet("myair:user", el("myairUser").value.trim());
-  __lsSet("myair:pass", el("myairPass").value);
-  el("myAirCreds").classList.remove("show");
-  el("myAirStatus").textContent = "Inloggegevens opgeslagen ✓";
-  setTimeout(()=>el("myAirStatus").textContent="", 2000);
-}
-async function syncMyAir(){
-  const user = localStorage.getItem("myair:user");
-  const pass = localStorage.getItem("myair:pass");
-  if(!user||!pass){
-    el("myAirStatus").textContent = "⚙️ Vul eerst je inloggegevens in";
-    el("myAirCreds").classList.add("show");
-    el("myairUser").value = user||"";
-    el("myairPass").value = pass||"";
-    return;
-  }
-  const date = el("datePicker").value || today();
-  const btn = el("btnMyAirSync");
-  btn.textContent = "⏳"; btn.disabled = true;
-  el("myAirStatus").textContent = "Verbinden met myAir...";
-  try{
-    const res = await fetch(MYAIR_PROXY, {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({username: user, password: pass, date})
-    });
-    const data = await res.json();
-    if(!res.ok || !data.success){
-      el("myAirStatus").textContent = "❌ " + (data.error||"Onbekende fout");
-      return;
-    }
-    // Vul de velden in
-    if(data.ahi != null){ el("ahi").value = data.ahi; }
-    if(data.maskUren){ el("maskUren").value = data.maskUren; }
-    if(data.seal){ setSeal(data.seal); }
-    el("myAirStatus").textContent = "✅ Gesynchroniseerd! AHI: "+(data.ahi??"-")+" | Masker: "+(data.maskUren||"-");
-    // Sla meteen op
-    saveLog();
-    toast("myAir data opgehaald en opgeslagen");
-  } catch(e){
-    el("myAirStatus").textContent = "❌ Verbindingsfout: " + e.message;
-  } finally {
-    btn.textContent = "Sync"; btn.disabled = false;
-  }
-}
 
 let __seal = "";
 function setSeal(val){
@@ -701,5 +621,6 @@ async function init(){
 
 init();
 </script>
+
 </body>
 </html>
